@@ -1,0 +1,185 @@
+/* Import Montserrat and Open Sans Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap');
+
+/* Define Diamond Quotation Theme */
+:root {
+    /* Colors */
+    --primary-color: #E8B923;
+    --primary-hover-color: #D4A71E;
+    --secondary-color: #0A1E3C;
+    --secondary-hover-color: #07152A;
+    --accent-color: #F8F9FA;
+    --accent-hover-color: #EDEFF2;
+    --background-color: #F5F6F5;
+    --surface-color: #F8F9FA;
+    --text-color: #000000;
+    --text-light-color: #D3D3D3;
+    --text-on-primary: #1C2526;
+    --text-on-secondary: #F8F9FA;
+    --text-on-accent: #1C2526;
+    --border-color: #D3D3D3;
+
+    /* Shadows */
+    --shadow-light: 0 2px 6px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+    --shadow-strong: 0 6px 20px rgba(0, 0, 0, 0.2);
+    --glow-effect: 0 0 12px rgba(232, 185, 35, 0.4);
+
+    /* Border Radii */
+    --border-radius-sm: 6px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    /* Fonts */
+    --font-primary: 'Montserrat', sans-serif;
+    --font-secondary: 'Open Sans', sans-serif;
+
+    /* Font Sizes */
+    --font-size-base: 1rem;
+    --font-size-sm: 0.875rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.5rem;
+    --font-size-2xl: 2rem;
+}
+
+.navbar {
+    background: rgb(255, 255, 255);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--font-size-lg);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    border-bottom: 1px solid var(--border-color);
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9));
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1500px;
+    width: 100%;
+    padding: 0 50px;
+    margin: 0 auto;
+}
+
+.navbar-logo img {
+    height: 50px;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-item {
+    height: 80px;
+}
+
+.nav-links {
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    padding: 0 1.5rem;
+    height: 100%;
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: var(--font-size-lg);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-links::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 1.5rem;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.nav-links:hover::after {
+    width: calc(100% - 3rem);
+}
+
+.nav-links:hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.nav-links.active {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+@media screen and (max-width: 960px) {
+    .navbar {
+        height: auto;
+        padding: 20px 0;
+        position: static; /* Remove sticky behavior in mobile */
+    }
+
+    .navbar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 20px;
+    }
+
+    .navbar-header {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .navbar-logo img {
+        height: 45px;
+    }
+
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .nav-item {
+        height: auto;
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links {
+        padding: 12px 0;
+        width: 100%;
+        font-size: var(--font-size-lg);
+        color: var(--text-color);
+        justify-content: center;
+    }
+
+    .nav-links::after {
+        display: none;
+    }
+
+    .nav-links:hover {
+        transform: none;
+        color: var(--primary-color);
+    }
+}

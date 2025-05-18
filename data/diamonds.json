@@ -1,0 +1,2879 @@
+[
+  {
+    "id": 1,
+    "SHAPE": "ROUND",
+    "MM": "0.8",
+    "PRICE/CT": 16000,
+    "MM & SHAPE": "ROUND-0.8 MM"
+  },
+  {
+    "id": 2,
+    "SHAPE": "ROUND",
+    "MM": 0.9,
+    "MM & SHAPE": "ROUND-0.9 MM",
+    "PRICE/CT": 13000
+  },
+  {
+    "id": 3,
+    "SHAPE": "ROUND",
+    "MM": 1,
+    "MM & SHAPE": "ROUND-1 MM",
+    "PRICE/CT": 11000
+  },
+  {
+    "id": 4,
+    "SHAPE": "ROUND",
+    "MM": 1.1,
+    "MM & SHAPE": "ROUND-1.1 MM",
+    "PRICE/CT": 11000
+  },
+  {
+    "id": 5,
+    "SHAPE": "ROUND",
+    "MM": 1.15,
+    "MM & SHAPE": "ROUND-1.15 MM",
+    "PRICE/CT": 10000
+  },
+  {
+    "id": 6,
+    "SHAPE": "ROUND",
+    "MM": 1.2,
+    "MM & SHAPE": "ROUND-1.2 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 7,
+    "SHAPE": "ROUND",
+    "MM": 1.25,
+    "MM & SHAPE": "ROUND-1.25 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 8,
+    "SHAPE": "ROUND",
+    "MM": 1.3,
+    "MM & SHAPE": "ROUND-1.3 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 9,
+    "SHAPE": "ROUND",
+    "MM": 1.35,
+    "MM & SHAPE": "ROUND-1.35 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 10,
+    "SHAPE": "ROUND",
+    "MM": 1.4,
+    "MM & SHAPE": "ROUND-1.4 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 11,
+    "SHAPE": "ROUND",
+    "MM": 1.45,
+    "MM & SHAPE": "ROUND-1.45 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 12,
+    "SHAPE": "ROUND",
+    "MM": 1.5,
+    "MM & SHAPE": "ROUND-1.5 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 13,
+    "SHAPE": "ROUND",
+    "MM": 1.55,
+    "MM & SHAPE": "ROUND-1.55 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 14,
+    "SHAPE": "ROUND",
+    "MM": 1.6,
+    "MM & SHAPE": "ROUND-1.6 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 15,
+    "SHAPE": "ROUND",
+    "MM": 1.7,
+    "MM & SHAPE": "ROUND-1.7 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 16,
+    "SHAPE": "ROUND",
+    "MM": 1.8,
+    "MM & SHAPE": "ROUND-1.8 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 17,
+    "SHAPE": "ROUND",
+    "MM": 1.9,
+    "MM & SHAPE": "ROUND-1.9 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 18,
+    "SHAPE": "ROUND",
+    "MM": 2,
+    "MM & SHAPE": "ROUND-2 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 19,
+    "SHAPE": "ROUND",
+    "MM": 2.1,
+    "MM & SHAPE": "ROUND-2.1 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 20,
+    "SHAPE": "ROUND",
+    "MM": 2.2,
+    "MM & SHAPE": "ROUND-2.2 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 21,
+    "SHAPE": "ROUND",
+    "MM": 2.3,
+    "MM & SHAPE": "ROUND-2.3 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 22,
+    "SHAPE": "ROUND",
+    "MM": 2.4,
+    "MM & SHAPE": "ROUND-2.4 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 23,
+    "SHAPE": "ROUND",
+    "MM": 2.5,
+    "MM & SHAPE": "ROUND-2.5 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 24,
+    "SHAPE": "ROUND",
+    "MM": 2.6,
+    "MM & SHAPE": "ROUND-2.6 MM",
+    "PRICE/CT": 3500
+  },
+  {
+    "id": 25,
+    "SHAPE": "ROUND",
+    "MM": 2.7,
+    "MM & SHAPE": "ROUND-2.7 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 26,
+    "SHAPE": "ROUND",
+    "MM": 2.8,
+    "MM & SHAPE": "ROUND-2.8 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 27,
+    "SHAPE": "ROUND",
+    "MM": 2.9,
+    "MM & SHAPE": "ROUND-2.9 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 28,
+    "SHAPE": "ROUND",
+    "MM": 3,
+    "MM & SHAPE": "ROUND-3 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 29,
+    "SHAPE": "ROUND",
+    "MM": 3.1,
+    "MM & SHAPE": "ROUND-3.1 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 30,
+    "SHAPE": "ROUND",
+    "MM": 3.2,
+    "MM & SHAPE": "ROUND-3.2 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 31,
+    "SHAPE": "ROUND",
+    "MM": 3.3,
+    "MM & SHAPE": "ROUND-3.3 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 32,
+    "SHAPE": "ROUND",
+    "MM": 3.4,
+    "MM & SHAPE": "ROUND-3.4 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 33,
+    "SHAPE": "ROUND",
+    "MM": 3.5,
+    "MM & SHAPE": "ROUND-3.5 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 34,
+    "SHAPE": "ROUND",
+    "MM": 3.6,
+    "MM & SHAPE": "ROUND-3.6 MM",
+    "PRICE/CT": 4000
+  },
+  {
+    "id": 35,
+    "SHAPE": "ROUND",
+    "MM": 3.7,
+    "MM & SHAPE": "ROUND-3.7 MM",
+    "PRICE/CT": 4500
+  },
+  {
+    "id": 36,
+    "SHAPE": "ROUND",
+    "MM": 3.8,
+    "MM & SHAPE": "ROUND-3.8 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 37,
+    "SHAPE": "ROUND",
+    "MM": 3.9,
+    "MM & SHAPE": "ROUND-3.9 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 38,
+    "SHAPE": "ROUND",
+    "MM": 4,
+    "MM & SHAPE": "ROUND-4 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 39,
+    "SHAPE": "ROUND",
+    "MM": 4.1,
+    "MM & SHAPE": "ROUND-4.1 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 40,
+    "SHAPE": "ROUND",
+    "MM": 4.2,
+    "MM & SHAPE": "ROUND-4.2 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 41,
+    "SHAPE": "ROUND",
+    "MM": 4.3,
+    "MM & SHAPE": "ROUND-4.3 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 42,
+    "SHAPE": "ROUND",
+    "MM": 4.4,
+    "MM & SHAPE": "ROUND-4.4 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 43,
+    "SHAPE": "ROUND",
+    "MM": 4.5,
+    "MM & SHAPE": "ROUND-4.5 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 44,
+    "SHAPE": "ROUND",
+    "MM": 4.6,
+    "MM & SHAPE": "ROUND-4.6 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 45,
+    "SHAPE": "ROUND",
+    "MM": 4.7,
+    "MM & SHAPE": "ROUND-4.7 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 46,
+    "SHAPE": "ROUND",
+    "MM": 4.8,
+    "MM & SHAPE": "ROUND-4.8 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 47,
+    "SHAPE": "ROUND",
+    "MM": 4.9,
+    "MM & SHAPE": "ROUND-4.9 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 48,
+    "SHAPE": "ROUND",
+    "MM": 5,
+    "MM & SHAPE": "ROUND-5 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 49,
+    "SHAPE": "ROUND",
+    "MM": 5.1,
+    "MM & SHAPE": "ROUND-5.1 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 50,
+    "SHAPE": "ROUND",
+    "MM": 5.2,
+    "MM & SHAPE": "ROUND-5.2 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 51,
+    "SHAPE": "ROUND",
+    "MM": 5.3,
+    "MM & SHAPE": "ROUND-5.3 MM",
+    "PRICE/CT": 5000
+  },
+  {
+    "id": 52,
+    "SHAPE": "ROUND",
+    "MM": 5.4,
+    "MM & SHAPE": "ROUND-5.4 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 53,
+    "SHAPE": "ROUND",
+    "MM": 5.5,
+    "MM & SHAPE": "ROUND-5.5 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 54,
+    "SHAPE": "ROUND",
+    "MM": 5.6,
+    "MM & SHAPE": "ROUND-5.6 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 55,
+    "SHAPE": "ROUND",
+    "MM": 5.8,
+    "MM & SHAPE": "ROUND-5.8 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 56,
+    "SHAPE": "ROUND",
+    "MM": 6,
+    "MM & SHAPE": "ROUND-6 MM",
+    "PRICE/CT": 5500
+  },
+  {
+    "id": 57,
+    "SHAPE": "ROUND",
+    "MM": 6.2,
+    "MM & SHAPE": "ROUND-6.2 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 58,
+    "SHAPE": "ROUND",
+    "MM": 6.4,
+    "MM & SHAPE": "ROUND-6.4 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 59,
+    "SHAPE": "ROUND",
+    "MM": 6.5,
+    "MM & SHAPE": "ROUND-6.5 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 60,
+    "SHAPE": "ROUND",
+    "MM": 6.6,
+    "MM & SHAPE": "ROUND-6.6 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 61,
+    "SHAPE": "ROUND",
+    "MM": 6.8,
+    "MM & SHAPE": "ROUND-6.8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 62,
+    "SHAPE": "ROUND",
+    "MM": 7,
+    "MM & SHAPE": "ROUND-7 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 63,
+    "SHAPE": "ROUND",
+    "MM": 7.2,
+    "MM & SHAPE": "ROUND-7.2 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 64,
+    "SHAPE": "ROUND",
+    "MM": 7.4,
+    "MM & SHAPE": "ROUND-7.4 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 65,
+    "SHAPE": "ROUND",
+    "MM": 7.6,
+    "MM & SHAPE": "ROUND-7.6 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 66,
+    "SHAPE": "ROUND",
+    "MM": 7.8,
+    "MM & SHAPE": "ROUND-7.8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 67,
+    "SHAPE": "ROUND",
+    "MM": 8,
+    "MM & SHAPE": "ROUND-8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 68,
+    "SHAPE": "ROUND",
+    "MM": 8.2,
+    "MM & SHAPE": "ROUND-8.2 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 69,
+    "SHAPE": "ROUND",
+    "MM": 8.4,
+    "MM & SHAPE": "ROUND-8.4 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 70,
+    "SHAPE": "ROUND",
+    "MM": 8.6,
+    "MM & SHAPE": "ROUND-8.6 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 71,
+    "SHAPE": "ROUND",
+    "MM": 8.8,
+    "MM & SHAPE": "ROUND-8.8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 72,
+    "SHAPE": "ROUND",
+    "MM": 9.2,
+    "MM & SHAPE": "ROUND-9.2 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 73,
+    "SHAPE": "ROUND",
+    "MM": 9.4,
+    "MM & SHAPE": "ROUND-9.4 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 74,
+    "SHAPE": "ROUND",
+    "MM": 9.6,
+    "MM & SHAPE": "ROUND-9.6 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 75,
+    "SHAPE": "ROUND",
+    "MM": 9.8,
+    "MM & SHAPE": "ROUND-9.8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 76,
+    "SHAPE": "ROUND",
+    "MM": 10,
+    "MM & SHAPE": "ROUND-10 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 77,
+    "SHAPE": "ROUND",
+    "MM": 10.2,
+    "MM & SHAPE": "ROUND-10.2 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 78,
+    "SHAPE": "ROUND",
+    "MM": 10.4,
+    "MM & SHAPE": "ROUND-10.4 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 79,
+    "SHAPE": "ROUND",
+    "MM": 10.6,
+    "MM & SHAPE": "ROUND-10.6 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 80,
+    "SHAPE": "ROUND",
+    "MM": 10.8,
+    "MM & SHAPE": "ROUND-10.8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 81,
+    "SHAPE": "ROUND",
+    "MM": 11,
+    "MM & SHAPE": "ROUND-11 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 82,
+    "SHAPE": "ROUND",
+    "MM": 11.2,
+    "MM & SHAPE": "ROUND-11.2 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 83,
+    "SHAPE": "ROUND",
+    "MM": 12,
+    "MM & SHAPE": "ROUND-12 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 84,
+    "SHAPE": "ROUND",
+    "MM": 13,
+    "MM & SHAPE": "ROUND-13 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 85,
+    "SHAPE": "PEAR",
+    "MM": "3x2",
+    "MM & SHAPE": "PEAR-3x2 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 86,
+    "SHAPE": "PEAR",
+    "MM": "3.3x2.2",
+    "MM & SHAPE": "PEAR-3.3x2.2 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 87,
+    "SHAPE": "PEAR",
+    "MM": "3.5x2.3",
+    "MM & SHAPE": "PEAR-3.5x2.3 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 88,
+    "SHAPE": "PEAR",
+    "MM": "3.8x2.5",
+    "MM & SHAPE": "PEAR-3.8x2.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 89,
+    "SHAPE": "PEAR",
+    "MM": "4x2.5",
+    "MM & SHAPE": "PEAR-4x2.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 90,
+    "SHAPE": "PEAR",
+    "MM": "4.3x2.7",
+    "MM & SHAPE": "PEAR-4.3x2.7 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 91,
+    "SHAPE": "PEAR",
+    "MM": "4.7x3.2",
+    "MM & SHAPE": "PEAR-4.7x3.2 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 92,
+    "SHAPE": "PEAR",
+    "MM": "4.8x3.3",
+    "MM & SHAPE": "PEAR-4.8x3.3 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 93,
+    "SHAPE": "PEAR",
+    "MM": "5x3.5",
+    "MM & SHAPE": "PEAR-5x3.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 94,
+    "SHAPE": "PEAR",
+    "MM": "5.1x3.7",
+    "MM & SHAPE": "PEAR-5.1x3.7 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 95,
+    "SHAPE": "PEAR",
+    "MM": "5.3x4",
+    "MM & SHAPE": "PEAR-5.3x4 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 96,
+    "SHAPE": "PEAR",
+    "MM": "5.4x4.2",
+    "MM & SHAPE": "PEAR-5.4x4.2 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 97,
+    "SHAPE": "PEAR",
+    "MM": "5.6x4.3",
+    "MM & SHAPE": "PEAR-5.6x4.3 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 98,
+    "SHAPE": "PEAR",
+    "MM": "5.7x4.5",
+    "MM & SHAPE": "PEAR-5.7x4.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 99,
+    "SHAPE": "PEAR",
+    "MM": "5.8x4.5",
+    "MM & SHAPE": "PEAR-5.8x4.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 100,
+    "SHAPE": "PEAR",
+    "MM": "6x4.5",
+    "MM & SHAPE": "PEAR-6x4.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 101,
+    "SHAPE": "PEAR",
+    "MM": "7x5",
+    "MM & SHAPE": "PEAR-7x5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 102,
+    "SHAPE": "PEAR",
+    "MM": "7.4x5",
+    "MM & SHAPE": "PEAR-7.4x5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 103,
+    "SHAPE": "PEAR",
+    "MM": "7.8x5",
+    "MM & SHAPE": "PEAR-7.8x5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 104,
+    "SHAPE": "PEAR",
+    "MM": "8x5",
+    "MM & SHAPE": "PEAR-8x5 MM",
+    "PRICE/CT": 10000
+  },
+  {
+    "id": 105,
+    "SHAPE": "PEAR",
+    "MM": "9x6",
+    "MM & SHAPE": "PEAR-9x6 MM",
+    "PRICE/CT": 10000
+  },
+  {
+    "id": 106,
+    "SHAPE": "PEAR",
+    "MM": "10x7",
+    "MM & SHAPE": "PEAR-10x7 MM",
+    "PRICE/CT": 10000
+  },
+  {
+    "id": 107,
+    "SHAPE": "PEAR",
+    "MM": "11x7",
+    "MM & SHAPE": "PEAR-11x7 MM",
+    "PRICE/CT": 11000
+  },
+  {
+    "id": 108,
+    "SHAPE": "PEAR",
+    "MM": "12x8",
+    "MM & SHAPE": "PEAR-12x8 MM",
+    "PRICE/CT": 11000
+  },
+  {
+    "id": 109,
+    "SHAPE": "PEAR",
+    "MM": "13x9",
+    "MM & SHAPE": "PEAR-13x9 MM",
+    "PRICE/CT": 11000
+  },
+  {
+    "id": 110,
+    "SHAPE": "PEAR",
+    "MM": "15x10",
+    "MM & SHAPE": "PEAR-15x10 MM",
+    "PRICE/CT": 11000
+  },
+  {
+    "id": 111,
+    "SHAPE": "PEAR",
+    "MM": "16x12",
+    "MM & SHAPE": "PEAR-16x12 MM",
+    "PRICE/CT": 11000
+  },
+  {
+    "id": 112,
+    "SHAPE": "MARQUIES",
+    "MM": "3x1.5",
+    "MM & SHAPE": "MARQUIES-3x1.5 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 113,
+    "SHAPE": "MARQUIES",
+    "MM": "3.3x1.7",
+    "MM & SHAPE": "MARQUIES-3.3x1.7 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 114,
+    "SHAPE": "MARQUIES",
+    "MM": "3.5x1.7",
+    "MM & SHAPE": "MARQUIES-3.5x1.7 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 115,
+    "SHAPE": "MARQUIES",
+    "MM": "3.6x1.8",
+    "MM & SHAPE": "MARQUIES-3.6x1.8 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 116,
+    "SHAPE": "MARQUIES",
+    "MM": "4x2",
+    "MM & SHAPE": "MARQUIES-4x2 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 117,
+    "SHAPE": "MARQUIES",
+    "MM": "4.2x2.1",
+    "MM & SHAPE": "MARQUIES-4.2x2.1 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 118,
+    "SHAPE": "MARQUIES",
+    "MM": "4.5x2.3",
+    "MM & SHAPE": "MARQUIES-4.5x2.3 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 119,
+    "SHAPE": "MARQUIES",
+    "MM": "5x2.5",
+    "MM & SHAPE": "MARQUIES-5x2.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 120,
+    "SHAPE": "MARQUIES",
+    "MM": "5.3x2.6",
+    "MM & SHAPE": "MARQUIES-5.3x2.6 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 121,
+    "SHAPE": "MARQUIES",
+    "MM": "5.5x2.7",
+    "MM & SHAPE": "MARQUIES-5.5x2.7 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 122,
+    "SHAPE": "MARQUIES",
+    "MM": "6x3",
+    "MM & SHAPE": "MARQUIES-6x3 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 123,
+    "SHAPE": "MARQUIES",
+    "MM": "6.4x3.2",
+    "MM & SHAPE": "MARQUIES-6.4x3.2 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 124,
+    "SHAPE": "MARQUIES",
+    "MM": "7x3.5",
+    "MM & SHAPE": "MARQUIES-7x3.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 125,
+    "SHAPE": "MARQUIES",
+    "MM": "8x4",
+    "MM & SHAPE": "MARQUIES-8x4 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 126,
+    "SHAPE": "MARQUIES",
+    "MM": "9x4.5",
+    "MM & SHAPE": "MARQUIES-9x4.5 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 127,
+    "SHAPE": "MARQUIES",
+    "MM": "10x5",
+    "MM & SHAPE": "MARQUIES-10x5 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 128,
+    "SHAPE": "MARQUIES",
+    "MM": "12x6",
+    "MM & SHAPE": "MARQUIES-12x6 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 129,
+    "SHAPE": "MARQUIES",
+    "MM": "14x7",
+    "MM & SHAPE": "MARQUIES-14x7 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 130,
+    "SHAPE": "MARQUIES",
+    "MM": "16x8",
+    "MM & SHAPE": "MARQUIES-16x8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 131,
+    "SHAPE": "OVAL",
+    "MM": "3.00 x 2.00",
+    "MM & SHAPE": "OVAL-3.00 x 2.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 132,
+    "SHAPE": "OVAL",
+    "MM": "3.50 x 2.30",
+    "MM & SHAPE": "OVAL-3.50 x 2.30 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 133,
+    "SHAPE": "OVAL",
+    "MM": "4.00 x 2.50",
+    "MM & SHAPE": "OVAL-4.00 x 2.50 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 134,
+    "SHAPE": "OVAL",
+    "MM": "4.50 x 3.00",
+    "MM & SHAPE": "OVAL-4.50 x 3.00 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 135,
+    "SHAPE": "OVAL",
+    "MM": "5.00 x 3.30",
+    "MM & SHAPE": "OVAL-5.00 x 3.30 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 136,
+    "SHAPE": "OVAL",
+    "MM": "5.50 x 3.70",
+    "MM & SHAPE": "OVAL-5.50 x 3.70 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 137,
+    "SHAPE": "OVAL",
+    "MM": "6.00 x 4.00",
+    "MM & SHAPE": "OVAL-6.00 x 4.00 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 138,
+    "SHAPE": "OVAL",
+    "MM": "6.50 x 4.30",
+    "MM & SHAPE": "OVAL-6.50 x 4.30 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 139,
+    "SHAPE": "OVAL",
+    "MM": "7.00 x 4.50",
+    "MM & SHAPE": "OVAL-7.00 x 4.50 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 140,
+    "SHAPE": "OVAL",
+    "MM": "7.50 x 4.80",
+    "MM & SHAPE": "OVAL-7.50 x 4.80 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 141,
+    "SHAPE": "OVAL",
+    "MM": "8.00 x 5.00",
+    "MM & SHAPE": "OVAL-8.00 x 5.00 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 142,
+    "SHAPE": "OVAL",
+    "MM": "8.50 x 5.30",
+    "MM & SHAPE": "OVAL-8.50 x 5.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 143,
+    "SHAPE": "OVAL",
+    "MM": "9.00 x 5.70",
+    "MM & SHAPE": "OVAL-9.00 x 5.70 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 144,
+    "SHAPE": "OVAL",
+    "MM": "9.50 x 6.00",
+    "MM & SHAPE": "OVAL-9.50 x 6.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 145,
+    "SHAPE": "OVAL",
+    "MM": "10.00 x 6.30",
+    "MM & SHAPE": "OVAL-10.00 x 6.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 146,
+    "SHAPE": "OVAL",
+    "MM": "10.50 x 6.50",
+    "MM & SHAPE": "OVAL-10.50 x 6.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 147,
+    "SHAPE": "OVAL",
+    "MM": "11.00 x 6.80",
+    "MM & SHAPE": "OVAL-11.00 x 6.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 148,
+    "SHAPE": "OVAL",
+    "MM": "11.50 x 7.00",
+    "MM & SHAPE": "OVAL-11.50 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 149,
+    "SHAPE": "OVAL",
+    "MM": "12.00 x 7.30",
+    "MM & SHAPE": "OVAL-12.00 x 7.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 150,
+    "SHAPE": "OVAL",
+    "MM": "12.50 x 7.70",
+    "MM & SHAPE": "OVAL-12.50 x 7.70 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 151,
+    "SHAPE": "OVAL",
+    "MM": "13.00 x 8.00",
+    "MM & SHAPE": "OVAL-13.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 152,
+    "SHAPE": "OVAL",
+    "MM": "13.50 x 8.30",
+    "MM & SHAPE": "OVAL-13.50 x 8.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 153,
+    "SHAPE": "OVAL",
+    "MM": "14.00 x 8.50",
+    "MM & SHAPE": "OVAL-14.00 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 154,
+    "SHAPE": "OVAL",
+    "MM": "14.50 x 8.80",
+    "MM & SHAPE": "OVAL-14.50 x 8.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 155,
+    "SHAPE": "OVAL",
+    "MM": "15.00 x 9.00",
+    "MM & SHAPE": "OVAL-15.00 x 9.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 156,
+    "SHAPE": "OVAL",
+    "MM": "15.50 x 9.30",
+    "MM & SHAPE": "OVAL-15.50 x 9.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 157,
+    "SHAPE": "OVAL",
+    "MM": "16.00 x 9.50",
+    "MM & SHAPE": "OVAL-16.00 x 9.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 158,
+    "SHAPE": "OVAL",
+    "MM": "16.50 x 9.80",
+    "MM & SHAPE": "OVAL-16.50 x 9.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 159,
+    "SHAPE": "EMERALD",
+    "MM": "3.00 x 2.00",
+    "MM & SHAPE": "EMERALD-3.00 x 2.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 160,
+    "SHAPE": "EMERALD",
+    "MM": "3.50 x 2.30",
+    "MM & SHAPE": "EMERALD-3.50 x 2.30 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 161,
+    "SHAPE": "EMERALD",
+    "MM": "4.00 x 2.50",
+    "MM & SHAPE": "EMERALD-4.00 x 2.50 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 162,
+    "SHAPE": "EMERALD",
+    "MM": "4.50 x 3.00",
+    "MM & SHAPE": "EMERALD-4.50 x 3.00 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 163,
+    "SHAPE": "EMERALD",
+    "MM": "5.00 x 3.30",
+    "MM & SHAPE": "EMERALD-5.00 x 3.30 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 164,
+    "SHAPE": "EMERALD",
+    "MM": "5.50 x 3.70",
+    "MM & SHAPE": "EMERALD-5.50 x 3.70 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 165,
+    "SHAPE": "EMERALD",
+    "MM": "6.00 x 4.00",
+    "MM & SHAPE": "EMERALD-6.00 x 4.00 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 166,
+    "SHAPE": "EMERALD",
+    "MM": "6.50 x 4.30",
+    "MM & SHAPE": "EMERALD-6.50 x 4.30 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 167,
+    "SHAPE": "EMERALD",
+    "MM": "7.00 x 4.50",
+    "MM & SHAPE": "EMERALD-7.00 x 4.50 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 168,
+    "SHAPE": "EMERALD",
+    "MM": "7.50 x 4.80",
+    "MM & SHAPE": "EMERALD-7.50 x 4.80 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 169,
+    "SHAPE": "EMERALD",
+    "MM": "8.00 x 5.00",
+    "MM & SHAPE": "EMERALD-8.00 x 5.00 MM",
+    "PRICE/CT": 7500
+  },
+  {
+    "id": 170,
+    "SHAPE": "EMERALD",
+    "MM": "8.50 x 5.30",
+    "MM & SHAPE": "EMERALD-8.50 x 5.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 171,
+    "SHAPE": "EMERALD",
+    "MM": "9.00 x 5.70",
+    "MM & SHAPE": "EMERALD-9.00 x 5.70 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 172,
+    "SHAPE": "EMERALD",
+    "MM": "9.50 x 6.00",
+    "MM & SHAPE": "EMERALD-9.50 x 6.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 173,
+    "SHAPE": "EMERALD",
+    "MM": "10.00 x 6.30",
+    "MM & SHAPE": "EMERALD-10.00 x 6.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 174,
+    "SHAPE": "EMERALD",
+    "MM": "10.50 x 6.50",
+    "MM & SHAPE": "EMERALD-10.50 x 6.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 175,
+    "SHAPE": "EMERALD",
+    "MM": "11.00 x 6.80",
+    "MM & SHAPE": "EMERALD-11.00 x 6.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 176,
+    "SHAPE": "EMERALD",
+    "MM": "11.50 x 7.00",
+    "MM & SHAPE": "EMERALD-11.50 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 177,
+    "SHAPE": "EMERALD",
+    "MM": "12.00 x 7.30",
+    "MM & SHAPE": "EMERALD-12.00 x 7.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 178,
+    "SHAPE": "EMERALD",
+    "MM": "12.50 x 7.70",
+    "MM & SHAPE": "EMERALD-12.50 x 7.70 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 179,
+    "SHAPE": "EMERALD",
+    "MM": "13.00 x 8.00",
+    "MM & SHAPE": "EMERALD-13.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 180,
+    "SHAPE": "EMERALD",
+    "MM": "13.50 x 8.30",
+    "MM & SHAPE": "EMERALD-13.50 x 8.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 181,
+    "SHAPE": "EMERALD",
+    "MM": "14.00 x 8.50",
+    "MM & SHAPE": "EMERALD-14.00 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 182,
+    "SHAPE": "EMERALD",
+    "MM": "14.50 x 8.80",
+    "MM & SHAPE": "EMERALD-14.50 x 8.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 183,
+    "SHAPE": "EMERALD",
+    "MM": "15.00 x 9.00",
+    "MM & SHAPE": "EMERALD-15.00 x 9.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 184,
+    "SHAPE": "EMERALD",
+    "MM": "15.50 x 9.30",
+    "MM & SHAPE": "EMERALD-15.50 x 9.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 185,
+    "SHAPE": "EMERALD",
+    "MM": "16.00 x 9.50",
+    "MM & SHAPE": "EMERALD-16.00 x 9.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 186,
+    "SHAPE": "EMERALD",
+    "MM": "16.50 x 9.80",
+    "MM & SHAPE": "EMERALD-16.50 x 9.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 187,
+    "SHAPE": "PRINCESS",
+    "MM": "2.00 x 2.00",
+    "MM & SHAPE": "PRINCESS-2.00 x 2.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 188,
+    "SHAPE": "PRINCESS",
+    "MM": "2.50 x 2.50",
+    "MM & SHAPE": "PRINCESS-2.50 x 2.50 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 189,
+    "SHAPE": "PRINCESS",
+    "MM": "2.80 x 2.80",
+    "MM & SHAPE": "PRINCESS-2.80 x 2.80 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 190,
+    "SHAPE": "PRINCESS",
+    "MM": "3.00 x 3.00",
+    "MM & SHAPE": "PRINCESS-3.00 x 3.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 191,
+    "SHAPE": "PRINCESS",
+    "MM": "3.30 x 3.30",
+    "MM & SHAPE": "PRINCESS-3.30 x 3.30 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 192,
+    "SHAPE": "PRINCESS",
+    "MM": "3.50 x 3.50",
+    "MM & SHAPE": "PRINCESS-3.50 x 3.50 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 193,
+    "SHAPE": "PRINCESS",
+    "MM": "3.80 x 3.80",
+    "MM & SHAPE": "PRINCESS-3.80 x 3.80 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 194,
+    "SHAPE": "PRINCESS",
+    "MM": "4.00 x 4.00",
+    "MM & SHAPE": "PRINCESS-4.00 x 4.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 195,
+    "SHAPE": "PRINCESS",
+    "MM": "4.30 x 4.30",
+    "MM & SHAPE": "PRINCESS-4.30 x 4.30 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 196,
+    "SHAPE": "PRINCESS",
+    "MM": "4.50 x 4.50",
+    "MM & SHAPE": "PRINCESS-4.50 x 4.50 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 197,
+    "SHAPE": "PRINCESS",
+    "MM": "4.80 x 4.80",
+    "MM & SHAPE": "PRINCESS-4.80 x 4.80 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 198,
+    "SHAPE": "PRINCESS",
+    "MM": "5.00 x 5.00",
+    "MM & SHAPE": "PRINCESS-5.00 x 5.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 199,
+    "SHAPE": "PRINCESS",
+    "MM": "5.30 x 5.30",
+    "MM & SHAPE": "PRINCESS-5.30 x 5.30 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 200,
+    "SHAPE": "PRINCESS",
+    "MM": "5.50 x 5.50",
+    "MM & SHAPE": "PRINCESS-5.50 x 5.50 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 201,
+    "SHAPE": "PRINCESS",
+    "MM": "5.80 x 5.80",
+    "MM & SHAPE": "PRINCESS-5.80 x 5.80 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 202,
+    "SHAPE": "PRINCESS",
+    "MM": "6.00 x 6.00",
+    "MM & SHAPE": "PRINCESS-6.00 x 6.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 203,
+    "SHAPE": "PRINCESS",
+    "MM": "6.30 x 6.30",
+    "MM & SHAPE": "PRINCESS-6.30 x 6.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 204,
+    "SHAPE": "PRINCESS",
+    "MM": "6.50 x 6.50",
+    "MM & SHAPE": "PRINCESS-6.50 x 6.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 205,
+    "SHAPE": "PRINCESS",
+    "MM": "6.80 x 6.80",
+    "MM & SHAPE": "PRINCESS-6.80 x 6.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 206,
+    "SHAPE": "PRINCESS",
+    "MM": "7.00 x 7.00",
+    "MM & SHAPE": "PRINCESS-7.00 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 207,
+    "SHAPE": "PRINCESS",
+    "MM": "7.30 x 7.30",
+    "MM & SHAPE": "PRINCESS-7.30 x 7.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 208,
+    "SHAPE": "PRINCESS",
+    "MM": "7.60 x 7.60",
+    "MM & SHAPE": "PRINCESS-7.60 x 7.60 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 209,
+    "SHAPE": "PRINCESS",
+    "MM": "8.00 x 8.00",
+    "MM & SHAPE": "PRINCESS-8.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 210,
+    "SHAPE": "PRINCESS",
+    "MM": "8.50 x 8.50",
+    "MM & SHAPE": "PRINCESS-8.50 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 211,
+    "SHAPE": "PRINCESS",
+    "MM": "9.00 x 9.00",
+    "MM & SHAPE": "PRINCESS-9.00 x 9.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 212,
+    "SHAPE": "PRINCESS",
+    "MM": "9.50 x 9.50",
+    "MM & SHAPE": "PRINCESS-9.50 x 9.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 213,
+    "SHAPE": "PRINCESS",
+    "MM": "10.00 x 10.00",
+    "MM & SHAPE": "PRINCESS-10.00 x 10.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 214,
+    "SHAPE": "PRINCESS",
+    "MM": "10.50 x 10.50",
+    "MM & SHAPE": "PRINCESS-10.50 x 10.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 215,
+    "SHAPE": "PRINCESS",
+    "MM": "11.00 x 11.00",
+    "MM & SHAPE": "PRINCESS-11.00 x 11.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 216,
+    "SHAPE": "PRINCESS",
+    "MM": "11.50 x 11.50",
+    "MM & SHAPE": "PRINCESS-11.50 x 11.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 217,
+    "SHAPE": "PRINCESS",
+    "MM": "12.00 x 12.00",
+    "MM & SHAPE": "PRINCESS-12.00 x 12.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 218,
+    "SHAPE": "Baguette ",
+    "MM": "2.00 x 1.00",
+    "MM & SHAPE": "Baguette -2.00 x 1.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 219,
+    "SHAPE": "Baguette ",
+    "MM": "3.00 x 1.50",
+    "MM & SHAPE": "Baguette -3.00 x 1.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 220,
+    "SHAPE": "Baguette ",
+    "MM": "4.00 x 2.00",
+    "MM & SHAPE": "Baguette -4.00 x 2.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 221,
+    "SHAPE": "Baguette ",
+    "MM": "5.00 x 2.50",
+    "MM & SHAPE": "Baguette -5.00 x 2.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 222,
+    "SHAPE": "Baguette ",
+    "MM": "6.00 x 3.00",
+    "MM & SHAPE": "Baguette -6.00 x 3.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 223,
+    "SHAPE": "Baguette ",
+    "MM": "7.00 x 3.50",
+    "MM & SHAPE": "Baguette -7.00 x 3.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 224,
+    "SHAPE": "Baguette ",
+    "MM": "8.00 x 4.00",
+    "MM & SHAPE": "Baguette -8.00 x 4.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 225,
+    "SHAPE": "Baguette ",
+    "MM": "9.00 x 4.50",
+    "MM & SHAPE": "Baguette -9.00 x 4.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 226,
+    "SHAPE": "Baguette ",
+    "MM": "10.00 x 5.00",
+    "MM & SHAPE": "Baguette -10.00 x 5.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 227,
+    "SHAPE": "Baguette ",
+    "MM": "11.00 x 5.50",
+    "MM & SHAPE": "Baguette -11.00 x 5.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 228,
+    "SHAPE": "Baguette ",
+    "MM": "12.00 x 6.00",
+    "MM & SHAPE": "Baguette -12.00 x 6.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 229,
+    "SHAPE": "Baguette ",
+    "MM": "13.00 x 6.50",
+    "MM & SHAPE": "Baguette -13.00 x 6.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 230,
+    "SHAPE": "Baguette ",
+    "MM": "14.00 x 7.00",
+    "MM & SHAPE": "Baguette -14.00 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 231,
+    "SHAPE": "Baguette ",
+    "MM": "15.00 x 7.50",
+    "MM & SHAPE": "Baguette -15.00 x 7.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 232,
+    "SHAPE": "Baguette ",
+    "MM": "16.00 x 8.00",
+    "MM & SHAPE": "Baguette -16.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 233,
+    "SHAPE": "Baguette ",
+    "MM": "17.00 x 8.50",
+    "MM & SHAPE": "Baguette -17.00 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 234,
+    "SHAPE": "Baguette ",
+    "MM": "18.00 x 9.00",
+    "MM & SHAPE": "Baguette -18.00 x 9.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 235,
+    "SHAPE": "Radiant ",
+    "MM": "2.0 x 4.0",
+    "MM & SHAPE": "Radiant -2.0 x 4.0 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 236,
+    "SHAPE": "Radiant ",
+    "MM": "2.2 x 4.2",
+    "MM & SHAPE": "Radiant -2.2 x 4.2 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 237,
+    "SHAPE": "Radiant ",
+    "MM": "2.4 x 4.4",
+    "MM & SHAPE": "Radiant -2.4 x 4.4 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 238,
+    "SHAPE": "Radiant ",
+    "MM": "2.6 x 4.6",
+    "MM & SHAPE": "Radiant -2.6 x 4.6 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 239,
+    "SHAPE": "Radiant ",
+    "MM": "2.8 x 4.8",
+    "MM & SHAPE": "Radiant -2.8 x 4.8 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 240,
+    "SHAPE": "Radiant ",
+    "MM": "3.0 x 5.0",
+    "MM & SHAPE": "Radiant -3.0 x 5.0 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 241,
+    "SHAPE": "Radiant ",
+    "MM": "3.2 x 5.2",
+    "MM & SHAPE": "Radiant -3.2 x 5.2 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 242,
+    "SHAPE": "Radiant ",
+    "MM": "3.5 x 5.5",
+    "MM & SHAPE": "Radiant -3.5 x 5.5 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 243,
+    "SHAPE": "Radiant ",
+    "MM": "3.7 x 5.7",
+    "MM & SHAPE": "Radiant -3.7 x 5.7 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 244,
+    "SHAPE": "Radiant ",
+    "MM": "4.0 x 6.0",
+    "MM & SHAPE": "Radiant -4.0 x 6.0 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 245,
+    "SHAPE": "Radiant ",
+    "MM": "4.3 x 6.3",
+    "MM & SHAPE": "Radiant -4.3 x 6.3 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 246,
+    "SHAPE": "Radiant ",
+    "MM": "4.5 x 6.5",
+    "MM & SHAPE": "Radiant -4.5 x 6.5 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 247,
+    "SHAPE": "Radiant ",
+    "MM": "4.7 x 6.7",
+    "MM & SHAPE": "Radiant -4.7 x 6.7 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 248,
+    "SHAPE": "Radiant ",
+    "MM": "5.0 x 7.0",
+    "MM & SHAPE": "Radiant -5.0 x 7.0 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 249,
+    "SHAPE": "Radiant ",
+    "MM": "5.2 x 7.2",
+    "MM & SHAPE": "Radiant -5.2 x 7.2 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 250,
+    "SHAPE": "Radiant ",
+    "MM": "5.5 x 7.5",
+    "MM & SHAPE": "Radiant -5.5 x 7.5 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 251,
+    "SHAPE": "Radiant ",
+    "MM": "5.7 x 7.7",
+    "MM & SHAPE": "Radiant -5.7 x 7.7 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 252,
+    "SHAPE": "Radiant ",
+    "MM": "6.0 x 8.0",
+    "MM & SHAPE": "Radiant -6.0 x 8.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 253,
+    "SHAPE": "Radiant ",
+    "MM": "6.2 x 8.2",
+    "MM & SHAPE": "Radiant -6.2 x 8.2 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 254,
+    "SHAPE": "Radiant ",
+    "MM": "6.5 x 8.5",
+    "MM & SHAPE": "Radiant -6.5 x 8.5 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 255,
+    "SHAPE": "Radiant ",
+    "MM": "6.8 x 8.8",
+    "MM & SHAPE": "Radiant -6.8 x 8.8 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 256,
+    "SHAPE": "Radiant ",
+    "MM": "7.0 x 9.0",
+    "MM & SHAPE": "Radiant -7.0 x 9.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 257,
+    "SHAPE": "Radiant ",
+    "MM": "7.3 x 9.3",
+    "MM & SHAPE": "Radiant -7.3 x 9.3 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 258,
+    "SHAPE": "Radiant ",
+    "MM": "7.5 x 9.5",
+    "MM & SHAPE": "Radiant -7.5 x 9.5 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 259,
+    "SHAPE": "Radiant ",
+    "MM": "8.0 x 10.0",
+    "MM & SHAPE": "Radiant -8.0 x 10.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 260,
+    "SHAPE": "Radiant ",
+    "MM": "8.5 x 10.5",
+    "MM & SHAPE": "Radiant -8.5 x 10.5 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 261,
+    "SHAPE": "Radiant ",
+    "MM": "9.0 x 11.0",
+    "MM & SHAPE": "Radiant -9.0 x 11.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 262,
+    "SHAPE": "Radiant ",
+    "MM": "9.5 x 11.5",
+    "MM & SHAPE": "Radiant -9.5 x 11.5 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 263,
+    "SHAPE": "Radiant ",
+    "MM": "10.0 x 12.0",
+    "MM & SHAPE": "Radiant -10.0 x 12.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 264,
+    "SHAPE": "Radiant ",
+    "MM": "10.5 x 13.0",
+    "MM & SHAPE": "Radiant -10.5 x 13.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 265,
+    "SHAPE": "Radiant ",
+    "MM": "11.0 x 14.0",
+    "MM & SHAPE": "Radiant -11.0 x 14.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 266,
+    "SHAPE": "Radiant ",
+    "MM": "11.5 x 15.0",
+    "MM & SHAPE": "Radiant -11.5 x 15.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 267,
+    "SHAPE": "Radiant ",
+    "MM": "12.0 x 16.0",
+    "MM & SHAPE": "Radiant -12.0 x 16.0 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 268,
+    "SHAPE": "Asscher ",
+    "MM": "2.20 x 2.20",
+    "MM & SHAPE": "Asscher -2.20 x 2.20 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 269,
+    "SHAPE": "Asscher ",
+    "MM": "2.50 x 2.50",
+    "MM & SHAPE": "Asscher -2.50 x 2.50 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 270,
+    "SHAPE": "Asscher ",
+    "MM": "2.70 x 2.70",
+    "MM & SHAPE": "Asscher -2.70 x 2.70 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 271,
+    "SHAPE": "Asscher ",
+    "MM": "3.00 x 3.00",
+    "MM & SHAPE": "Asscher -3.00 x 3.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 272,
+    "SHAPE": "Asscher ",
+    "MM": "3.30 x 3.30",
+    "MM & SHAPE": "Asscher -3.30 x 3.30 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 273,
+    "SHAPE": "Asscher ",
+    "MM": "3.50 x 3.50",
+    "MM & SHAPE": "Asscher -3.50 x 3.50 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 274,
+    "SHAPE": "Asscher ",
+    "MM": "3.80 x 3.80",
+    "MM & SHAPE": "Asscher -3.80 x 3.80 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 275,
+    "SHAPE": "Asscher ",
+    "MM": "4.00 x 4.00",
+    "MM & SHAPE": "Asscher -4.00 x 4.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 276,
+    "SHAPE": "Asscher ",
+    "MM": "4.20 x 4.20",
+    "MM & SHAPE": "Asscher -4.20 x 4.20 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 277,
+    "SHAPE": "Asscher ",
+    "MM": "4.40 x 4.40",
+    "MM & SHAPE": "Asscher -4.40 x 4.40 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 278,
+    "SHAPE": "Asscher ",
+    "MM": "4.60 x 4.60",
+    "MM & SHAPE": "Asscher -4.60 x 4.60 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 279,
+    "SHAPE": "Asscher ",
+    "MM": "4.80 x 4.80",
+    "MM & SHAPE": "Asscher -4.80 x 4.80 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 280,
+    "SHAPE": "Asscher ",
+    "MM": "5.00 x 5.00",
+    "MM & SHAPE": "Asscher -5.00 x 5.00 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 281,
+    "SHAPE": "Asscher ",
+    "MM": "5.20 x 5.20",
+    "MM & SHAPE": "Asscher -5.20 x 5.20 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 282,
+    "SHAPE": "Asscher ",
+    "MM": "5.40 x 5.40",
+    "MM & SHAPE": "Asscher -5.40 x 5.40 MM",
+    "PRICE/CT": 8000
+  },
+  {
+    "id": 283,
+    "SHAPE": "Asscher ",
+    "MM": "5.50 x 5.50",
+    "MM & SHAPE": "Asscher -5.50 x 5.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 284,
+    "SHAPE": "Asscher ",
+    "MM": "5.80 x 5.80",
+    "MM & SHAPE": "Asscher -5.80 x 5.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 285,
+    "SHAPE": "Asscher ",
+    "MM": "6.00 x 6.00",
+    "MM & SHAPE": "Asscher -6.00 x 6.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 286,
+    "SHAPE": "Asscher ",
+    "MM": "6.30 x 6.30",
+    "MM & SHAPE": "Asscher -6.30 x 6.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 287,
+    "SHAPE": "Asscher ",
+    "MM": "6.50 x 6.50",
+    "MM & SHAPE": "Asscher -6.50 x 6.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 288,
+    "SHAPE": "Asscher ",
+    "MM": "6.80 x 6.80",
+    "MM & SHAPE": "Asscher -6.80 x 6.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 289,
+    "SHAPE": "Asscher ",
+    "MM": "7.00 x 7.00",
+    "MM & SHAPE": "Asscher -7.00 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 290,
+    "SHAPE": "Asscher ",
+    "MM": "7.30 x 7.30",
+    "MM & SHAPE": "Asscher -7.30 x 7.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 291,
+    "SHAPE": "Asscher ",
+    "MM": "7.60 x 7.60",
+    "MM & SHAPE": "Asscher -7.60 x 7.60 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 292,
+    "SHAPE": "Asscher ",
+    "MM": "8.00 x 8.00",
+    "MM & SHAPE": "Asscher -8.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 293,
+    "SHAPE": "Asscher ",
+    "MM": "8.30 x 8.30",
+    "MM & SHAPE": "Asscher -8.30 x 8.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 294,
+    "SHAPE": "Asscher ",
+    "MM": "8.50 x 8.50",
+    "MM & SHAPE": "Asscher -8.50 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 295,
+    "SHAPE": "Asscher ",
+    "MM": "8.80 x 8.80",
+    "MM & SHAPE": "Asscher -8.80 x 8.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 296,
+    "SHAPE": "Asscher ",
+    "MM": "9.20 x 9.20",
+    "MM & SHAPE": "Asscher -9.20 x 9.20 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 297,
+    "SHAPE": "Asscher ",
+    "MM": "9.50 x 9.50",
+    "MM & SHAPE": "Asscher -9.50 x 9.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 298,
+    "SHAPE": "Asscher ",
+    "MM": "9.80 x 9.80",
+    "MM & SHAPE": "Asscher -9.80 x 9.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 299,
+    "SHAPE": "Asscher ",
+    "MM": "10.00 x 10.00",
+    "MM & SHAPE": "Asscher -10.00 x 10.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 300,
+    "SHAPE": "Heart",
+    "MM": "2.00 x 2.00",
+    "MM & SHAPE": "Heart-2.00 x 2.00 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 301,
+    "SHAPE": "Heart",
+    "MM": "2.50 x 2.50",
+    "MM & SHAPE": "Heart-2.50 x 2.50 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 302,
+    "SHAPE": "Heart",
+    "MM": "2.80 x 2.80",
+    "MM & SHAPE": "Heart-2.80 x 2.80 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 303,
+    "SHAPE": "Heart",
+    "MM": "3.00 x 3.00",
+    "MM & SHAPE": "Heart-3.00 x 3.00 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 304,
+    "SHAPE": "Heart",
+    "MM": "3.30 x 3.30",
+    "MM & SHAPE": "Heart-3.30 x 3.30 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 305,
+    "SHAPE": "Heart",
+    "MM": "3.50 x 3.50",
+    "MM & SHAPE": "Heart-3.50 x 3.50 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 306,
+    "SHAPE": "Heart",
+    "MM": "3.80 x 3.80",
+    "MM & SHAPE": "Heart-3.80 x 3.80 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 307,
+    "SHAPE": "Heart",
+    "MM": "4.00 x 4.00",
+    "MM & SHAPE": "Heart-4.00 x 4.00 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 308,
+    "SHAPE": "Heart",
+    "MM": "4.30 x 4.30",
+    "MM & SHAPE": "Heart-4.30 x 4.30 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 309,
+    "SHAPE": "Heart",
+    "MM": "4.50 x 4.50",
+    "MM & SHAPE": "Heart-4.50 x 4.50 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 310,
+    "SHAPE": "Heart",
+    "MM": "4.80 x 4.80",
+    "MM & SHAPE": "Heart-4.80 x 4.80 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 311,
+    "SHAPE": "Heart",
+    "MM": "5.00 x 5.00",
+    "MM & SHAPE": "Heart-5.00 x 5.00 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 312,
+    "SHAPE": "Heart",
+    "MM": "5.30 x 5.30",
+    "MM & SHAPE": "Heart-5.30 x 5.30 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 313,
+    "SHAPE": "Heart",
+    "MM": "5.50 x 5.50",
+    "MM & SHAPE": "Heart-5.50 x 5.50 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 314,
+    "SHAPE": "Heart",
+    "MM": "5.80 x 5.80",
+    "MM & SHAPE": "Heart-5.80 x 5.80 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 315,
+    "SHAPE": "Heart",
+    "MM": "6.00 x 6.00",
+    "MM & SHAPE": "Heart-6.00 x 6.00 MM",
+    "PRICE/CT": 8500
+  },
+  {
+    "id": 316,
+    "SHAPE": "Heart",
+    "MM": "6.30 x 6.30",
+    "MM & SHAPE": "Heart-6.30 x 6.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 317,
+    "SHAPE": "Heart",
+    "MM": "6.60 x 6.60",
+    "MM & SHAPE": "Heart-6.60 x 6.60 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 318,
+    "SHAPE": "Heart",
+    "MM": "6.80 x 6.80",
+    "MM & SHAPE": "Heart-6.80 x 6.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 319,
+    "SHAPE": "Heart",
+    "MM": "7.00 x 7.00",
+    "MM & SHAPE": "Heart-7.00 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 320,
+    "SHAPE": "Heart",
+    "MM": "7.30 x 7.30",
+    "MM & SHAPE": "Heart-7.30 x 7.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 321,
+    "SHAPE": "Heart",
+    "MM": "7.60 x 7.60",
+    "MM & SHAPE": "Heart-7.60 x 7.60 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 322,
+    "SHAPE": "Heart",
+    "MM": "8.00 x 8.00",
+    "MM & SHAPE": "Heart-8.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 323,
+    "SHAPE": "Heart",
+    "MM": "8.50 x 8.50",
+    "MM & SHAPE": "Heart-8.50 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 324,
+    "SHAPE": "Heart",
+    "MM": "9.00 x 9.00",
+    "MM & SHAPE": "Heart-9.00 x 9.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 325,
+    "SHAPE": "Heart",
+    "MM": "9.50 x 9.50",
+    "MM & SHAPE": "Heart-9.50 x 9.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 326,
+    "SHAPE": "Heart",
+    "MM": "10.00 x 10.00",
+    "MM & SHAPE": "Heart-10.00 x 10.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 327,
+    "SHAPE": "Heart",
+    "MM": "10.50 x 10.50",
+    "MM & SHAPE": "Heart-10.50 x 10.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 328,
+    "SHAPE": "Heart",
+    "MM": "11.00 x 11.00",
+    "MM & SHAPE": "Heart-11.00 x 11.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 329,
+    "SHAPE": "Heart",
+    "MM": "11.50 x 11.50",
+    "MM & SHAPE": "Heart-11.50 x 11.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 330,
+    "SHAPE": "Heart",
+    "MM": "12.00 x 12.00",
+    "MM & SHAPE": "Heart-12.00 x 12.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 331,
+    "SHAPE": "Tap Baguette ",
+    "MM": "3.00 x 1.75 x 1.00",
+    "MM & SHAPE": "Tap Baguette -3.00 x 1.75 x 1.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 332,
+    "SHAPE": "Tap Baguette ",
+    "MM": "4.00 x 2.00 x 1.00",
+    "MM & SHAPE": "Tap Baguette -4.00 x 2.00 x 1.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 333,
+    "SHAPE": "Tap Baguette ",
+    "MM": "5.00 x 2.25 x 1.25",
+    "MM & SHAPE": "Tap Baguette -5.00 x 2.25 x 1.25 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 334,
+    "SHAPE": "Tap Baguette ",
+    "MM": "5.50 x 2.50 x 1.25",
+    "MM & SHAPE": "Tap Baguette -5.50 x 2.50 x 1.25 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 335,
+    "SHAPE": "Tap Baguette ",
+    "MM": "6.00 x 2.75 x 1.50",
+    "MM & SHAPE": "Tap Baguette -6.00 x 2.75 x 1.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 336,
+    "SHAPE": "Tap Baguette ",
+    "MM": "6.50 x 3.00 x 1.75",
+    "MM & SHAPE": "Tap Baguette -6.50 x 3.00 x 1.75 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 337,
+    "SHAPE": "Tap Baguette ",
+    "MM": "7.00 x 3.25 x 2.00",
+    "MM & SHAPE": "Tap Baguette -7.00 x 3.25 x 2.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 338,
+    "SHAPE": "Tap Baguette ",
+    "MM": "7.50 x 3.50 x 2.25",
+    "MM & SHAPE": "Tap Baguette -7.50 x 3.50 x 2.25 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 339,
+    "SHAPE": "Tap Baguette ",
+    "MM": "8.00 x 3.75 x 2.50",
+    "MM & SHAPE": "Tap Baguette -8.00 x 3.75 x 2.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 340,
+    "SHAPE": "Tap Baguette ",
+    "MM": "8.50 x 4.00 x 2.75",
+    "MM & SHAPE": "Tap Baguette -8.50 x 4.00 x 2.75 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 341,
+    "SHAPE": "Tap Baguette ",
+    "MM": "9.00 x 4.25 x 3.00",
+    "MM & SHAPE": "Tap Baguette -9.00 x 4.25 x 3.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 342,
+    "SHAPE": "Tap Baguette ",
+    "MM": "9.50 x 4.50 x 3.25",
+    "MM & SHAPE": "Tap Baguette -9.50 x 4.50 x 3.25 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 343,
+    "SHAPE": "Tap Baguette ",
+    "MM": "10.00 x 4.75 x 3.50",
+    "MM & SHAPE": "Tap Baguette -10.00 x 4.75 x 3.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 344,
+    "SHAPE": "Tap Baguette ",
+    "MM": "11.00 x 5.25 x 3.75",
+    "MM & SHAPE": "Tap Baguette -11.00 x 5.25 x 3.75 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 345,
+    "SHAPE": "Tap Baguette ",
+    "MM": "12.00 x 5.50 x 4.00",
+    "MM & SHAPE": "Tap Baguette -12.00 x 5.50 x 4.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 346,
+    "SHAPE": "Tap Baguette ",
+    "MM": "13.00 x 5.75 x 4.25",
+    "MM & SHAPE": "Tap Baguette -13.00 x 5.75 x 4.25 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 347,
+    "SHAPE": "Tap Baguette ",
+    "MM": "14.00 x 6.00 x 4.50",
+    "MM & SHAPE": "Tap Baguette -14.00 x 6.00 x 4.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 348,
+    "SHAPE": "Tap Baguette ",
+    "MM": "15.00 x 6.25 x 4.75",
+    "MM & SHAPE": "Tap Baguette -15.00 x 6.25 x 4.75 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 349,
+    "SHAPE": "Tap Baguette ",
+    "MM": "16.00 x 6.50 x 5.00",
+    "MM & SHAPE": "Tap Baguette -16.00 x 6.50 x 5.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 350,
+    "SHAPE": "Tap Baguette ",
+    "MM": "17.00 x 7.00 x 5.25",
+    "MM & SHAPE": "Tap Baguette -17.00 x 7.00 x 5.25 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 351,
+    "SHAPE": "Tap Baguette ",
+    "MM": "18.00 x 7.50 x 5.50",
+    "MM & SHAPE": "Tap Baguette -18.00 x 7.50 x 5.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 352,
+    "SHAPE": "Square Cushion ",
+    "MM": "2.00 x 2.00",
+    "MM & SHAPE": "Square Cushion -2.00 x 2.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 353,
+    "SHAPE": "Square Cushion ",
+    "MM": "2.50 x 2.50",
+    "MM & SHAPE": "Square Cushion -2.50 x 2.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 354,
+    "SHAPE": "Square Cushion ",
+    "MM": "2.80 x 2.80",
+    "MM & SHAPE": "Square Cushion -2.80 x 2.80 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 355,
+    "SHAPE": "Square Cushion ",
+    "MM": "3.00 x 3.00",
+    "MM & SHAPE": "Square Cushion -3.00 x 3.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 356,
+    "SHAPE": "Square Cushion ",
+    "MM": "3.30 x 3.30",
+    "MM & SHAPE": "Square Cushion -3.30 x 3.30 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 357,
+    "SHAPE": "Square Cushion ",
+    "MM": "3.50 x 3.50",
+    "MM & SHAPE": "Square Cushion -3.50 x 3.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 358,
+    "SHAPE": "Square Cushion ",
+    "MM": "3.80 x 3.80",
+    "MM & SHAPE": "Square Cushion -3.80 x 3.80 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 359,
+    "SHAPE": "Square Cushion ",
+    "MM": "4.00 x 4.00",
+    "MM & SHAPE": "Square Cushion -4.00 x 4.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 360,
+    "SHAPE": "Square Cushion ",
+    "MM": "4.30 x 4.30",
+    "MM & SHAPE": "Square Cushion -4.30 x 4.30 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 361,
+    "SHAPE": "Square Cushion ",
+    "MM": "4.50 x 4.50",
+    "MM & SHAPE": "Square Cushion -4.50 x 4.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 362,
+    "SHAPE": "Square Cushion ",
+    "MM": "4.80 x 4.80",
+    "MM & SHAPE": "Square Cushion -4.80 x 4.80 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 363,
+    "SHAPE": "Square Cushion ",
+    "MM": "5.00 x 5.00",
+    "MM & SHAPE": "Square Cushion -5.00 x 5.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 364,
+    "SHAPE": "Square Cushion ",
+    "MM": "5.30 x 5.30",
+    "MM & SHAPE": "Square Cushion -5.30 x 5.30 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 365,
+    "SHAPE": "Square Cushion ",
+    "MM": "5.50 x 5.50",
+    "MM & SHAPE": "Square Cushion -5.50 x 5.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 366,
+    "SHAPE": "Square Cushion ",
+    "MM": "5.80 x 5.80",
+    "MM & SHAPE": "Square Cushion -5.80 x 5.80 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 367,
+    "SHAPE": "Square Cushion ",
+    "MM": "6.00 x 6.00",
+    "MM & SHAPE": "Square Cushion -6.00 x 6.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 368,
+    "SHAPE": "Square Cushion ",
+    "MM": "6.30 x 6.30",
+    "MM & SHAPE": "Square Cushion -6.30 x 6.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 369,
+    "SHAPE": "Square Cushion ",
+    "MM": "6.50 x 6.50",
+    "MM & SHAPE": "Square Cushion -6.50 x 6.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 370,
+    "SHAPE": "Square Cushion ",
+    "MM": "6.80 x 6.80",
+    "MM & SHAPE": "Square Cushion -6.80 x 6.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 371,
+    "SHAPE": "Square Cushion ",
+    "MM": "7.00 x 7.00",
+    "MM & SHAPE": "Square Cushion -7.00 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 372,
+    "SHAPE": "Square Cushion ",
+    "MM": "7.30 x 7.30",
+    "MM & SHAPE": "Square Cushion -7.30 x 7.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 373,
+    "SHAPE": "Square Cushion ",
+    "MM": "7.50 x 7.50",
+    "MM & SHAPE": "Square Cushion -7.50 x 7.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 374,
+    "SHAPE": "Square Cushion ",
+    "MM": "7.80 x 7.80",
+    "MM & SHAPE": "Square Cushion -7.80 x 7.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 375,
+    "SHAPE": "Square Cushion ",
+    "MM": "8.00 x 8.00",
+    "MM & SHAPE": "Square Cushion -8.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 376,
+    "SHAPE": "Square Cushion ",
+    "MM": "8.50 x 8.50",
+    "MM & SHAPE": "Square Cushion -8.50 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 377,
+    "SHAPE": "Square Cushion ",
+    "MM": "9.00 x 9.00",
+    "MM & SHAPE": "Square Cushion -9.00 x 9.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 378,
+    "SHAPE": "Square Cushion ",
+    "MM": "9.50 x 9.50",
+    "MM & SHAPE": "Square Cushion -9.50 x 9.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 379,
+    "SHAPE": "Square Cushion ",
+    "MM": "10.00 x 10.00",
+    "MM & SHAPE": "Square Cushion -10.00 x 10.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 380,
+    "SHAPE": "Square Cushion ",
+    "MM": "10.50 x 10.50",
+    "MM & SHAPE": "Square Cushion -10.50 x 10.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 381,
+    "SHAPE": "Square Cushion ",
+    "MM": "11.00 x 11.00",
+    "MM & SHAPE": "Square Cushion -11.00 x 11.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 382,
+    "SHAPE": "Square Cushion ",
+    "MM": "11.50 x 11.50",
+    "MM & SHAPE": "Square Cushion -11.50 x 11.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 383,
+    "SHAPE": "Square Cushion ",
+    "MM": "12.00 x 12.00",
+    "MM & SHAPE": "Square Cushion -12.00 x 12.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 384,
+    "SHAPE": "long-cushion",
+    "MM": "3.00 x 2.30",
+    "MM & SHAPE": "long-cushion-3.00 x 2.30 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 385,
+    "SHAPE": "long-cushion",
+    "MM": "3.50 x 2.70",
+    "MM & SHAPE": "long-cushion-3.50 x 2.70 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 386,
+    "SHAPE": "long-cushion",
+    "MM": "4.00 x 3.00",
+    "MM & SHAPE": "long-cushion-4.00 x 3.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 387,
+    "SHAPE": "long-cushion",
+    "MM": "4.50 x 3.20",
+    "MM & SHAPE": "long-cushion-4.50 x 3.20 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 388,
+    "SHAPE": "long-cushion",
+    "MM": "5.00 x 3.50",
+    "MM & SHAPE": "long-cushion-5.00 x 3.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 389,
+    "SHAPE": "long-cushion",
+    "MM": "5.50 x 3.80",
+    "MM & SHAPE": "long-cushion-5.50 x 3.80 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 390,
+    "SHAPE": "long-cushion",
+    "MM": "6.00 x 4.00",
+    "MM & SHAPE": "long-cushion-6.00 x 4.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 391,
+    "SHAPE": "long-cushion",
+    "MM": "6.50 x 4.20",
+    "MM & SHAPE": "long-cushion-6.50 x 4.20 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 392,
+    "SHAPE": "long-cushion",
+    "MM": "7.00 x 4.50",
+    "MM & SHAPE": "long-cushion-7.00 x 4.50 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 393,
+    "SHAPE": "long-cushion",
+    "MM": "7.50 x 4.80",
+    "MM & SHAPE": "long-cushion-7.50 x 4.80 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 394,
+    "SHAPE": "long-cushion",
+    "MM": "8.00 x 5.00",
+    "MM & SHAPE": "long-cushion-8.00 x 5.00 MM",
+    "PRICE/CT": 9000
+  },
+  {
+    "id": 395,
+    "SHAPE": "long-cushion",
+    "MM": "8.50 x 5.30",
+    "MM & SHAPE": "long-cushion-8.50 x 5.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 396,
+    "SHAPE": "long-cushion",
+    "MM": "9.00 x 5.80",
+    "MM & SHAPE": "long-cushion-9.00 x 5.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 397,
+    "SHAPE": "long-cushion",
+    "MM": "9.50 x 6.00",
+    "MM & SHAPE": "long-cushion-9.50 x 6.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 398,
+    "SHAPE": "long-cushion",
+    "MM": "10.00 x 6.30",
+    "MM & SHAPE": "long-cushion-10.00 x 6.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 399,
+    "SHAPE": "long-cushion",
+    "MM": "10.50 x 6.50",
+    "MM & SHAPE": "long-cushion-10.50 x 6.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 400,
+    "SHAPE": "long-cushion",
+    "MM": "11.00 x 6.80",
+    "MM & SHAPE": "long-cushion-11.00 x 6.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 401,
+    "SHAPE": "long-cushion",
+    "MM": "11.50 x 7.00",
+    "MM & SHAPE": "long-cushion-11.50 x 7.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 402,
+    "SHAPE": "long-cushion",
+    "MM": "12.00 x 7.30",
+    "MM & SHAPE": "long-cushion-12.00 x 7.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 403,
+    "SHAPE": "long-cushion",
+    "MM": "12.50 x 7.80",
+    "MM & SHAPE": "long-cushion-12.50 x 7.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 404,
+    "SHAPE": "long-cushion",
+    "MM": "13.00 x 8.00",
+    "MM & SHAPE": "long-cushion-13.00 x 8.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 405,
+    "SHAPE": "long-cushion",
+    "MM": "13.50 x 8.30",
+    "MM & SHAPE": "long-cushion-13.50 x 8.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 406,
+    "SHAPE": "long-cushion",
+    "MM": "14.00 x 8.50",
+    "MM & SHAPE": "long-cushion-14.00 x 8.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 407,
+    "SHAPE": "long-cushion",
+    "MM": "14.50 x 8.80",
+    "MM & SHAPE": "long-cushion-14.50 x 8.80 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 408,
+    "SHAPE": "long-cushion",
+    "MM": "15.00 x 9.00",
+    "MM & SHAPE": "long-cushion-15.00 x 9.00 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 409,
+    "SHAPE": "long-cushion",
+    "MM": "15.50 x 9.30",
+    "MM & SHAPE": "long-cushion-15.50 x 9.30 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 410,
+    "SHAPE": "long-cushion",
+    "MM": "16.00 x 9.50",
+    "MM & SHAPE": "long-cushion-16.00 x 9.50 MM",
+    "PRICE/CT": 0
+  },
+  {
+    "id": 411,
+    "SHAPE": "long-cushion",
+    "MM": "16.50 x 9.80",
+    "PRICE/CT": 1,
+    "MM & SHAPE": "long-cushion-16.50 x 9.80 MM"
+  }
+]

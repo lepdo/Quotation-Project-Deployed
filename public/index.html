@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metal & Diamond Quotation Form</title>
+    <link rel="icon" type="image/jpeg" href="/assest/logo.jpg">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+
+    <!-- jsPDF Core Library FIRST -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- jsPDF-AutoTable Plugin SECOND -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.autotable.min.js"></script>
+    <!-- SheetJS (xlsx) Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/navbar.css">
+</head>
+<body>
+  <div id="navbar"></div>
+    <div class="container">
+        <div class="header">
+            <h1 class="form-title">Metal & Diamond Quotation</h1>
+        </div>
+
+        <div class="form-body">
+            <!-- IDENTIFICATION DETAILS SECTION -->
+            <div class="section identification-section">
+                <h2 class="section-title">Identification Details</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="itemIdSku">ID / SKU</label>
+                        <input type="text" id="itemIdSku" placeholder="Enter Item ID or SKU">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemCategory">Category</label>
+                        <select id="itemCategory" class="category-select">
+                            <option value="">Select Category</option>
+                            <option value="Earrings">Earrings</option>
+                            <option value="Rings">Rings</option>
+                            <option value="Necklaces">Necklaces</option>
+                            <option value="Bracelets">Bracelets</option>
+                            <option value="Pendants">Pendants</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width image-upload-group">
+                        <label for="itemImage">Upload Image (Optional)</label>
+                        <div class="image-input-wrapper">
+                            <input type="file" id="itemImage" accept="image/*" class="image-input-hidden">
+                            <label for="itemImage" class="image-input-label">
+                                <span class="image-input-icon">🖼️</span>
+                                <span id="imageInputText">Click to upload or drag & drop</span>
+                            </label>
+                            <img id="itemImagePreviewInput" src="#" alt="Image Preview" class="image-preview-input" style="display:none;">
+                            <button type="button" id="removeImageBtn" class="btn btn-remove-image" style="display:none;">×</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- METAL SECTION -->
+            <div class="section metal-details-section" data-metal-section-type="metal">
+                <h2 class="section-title">Metal Details</h2>
+                <div id="metalEntriesContainer" class="metal-entries-container"></div>
+                <div class="form-row">
+                    <div class="form-group" style="flex: 0 0 auto;">
+                        <button id="addMetalItemBtn" class="btn btn-add add-metal-btn">Add Metal Item</button>
+                    </div>
+                </div>
+                <div class="table-responsive-wrapper">
+                    <table id="metalTable" class="metal-table">
+                        <thead>
+                            <tr>
+                                <th>Metal & Purity</th>
+                                <th>Grams</th>
+                                <th>Rate/Grm</th>
+                                <th>Total Metal</th>
+                                <th>Making Charges</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalMetalAmount">Total Metal Amount</label>
+                        <input type="number" id="totalMetalAmount" class="total-metal-amount" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalMetalMakingCharges">Total Making Charges (Metal)</label>
+                        <input type="number" id="totalMetalMakingCharges" class="total-metal-making-charges" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DIAMONDS SECTION -->
+            <div class="section diamond-section">
+                <h2 class="section-title">Diamond Details</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="diamondShape">Shape</label>
+                        <select id="diamondShape" class="shape-select">
+                            <option value="">Select Shape</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="diamondMm">MM</label>
+                        <input type="text" id="diamondMm" placeholder="Enter MM value">
+                    </div>
+                    <div class="form-group">
+                        <label for="diamondPcs">PCS</label>
+                        <input type="number" id="diamondPcs" placeholder="Enter PCS">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="weightPcs">Weight/PCS</label>
+                        <input type="number" id="weightPcs" placeholder="Enter weight per piece" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="totalWeight">Total Weight/CT</label>
+                        <input type="number" id="totalWeight" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="shapeMmDropdown">Shape & MM</label>
+                        <select id="shapeMmDropdown" class="shape-mm-select">
+                            <option value="">Select Shape & MM</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="priceCt">Price/CT</label>
+                        <input type="number" id="priceCt" readonly>
+                    </div>
+                    <div class="form-group manual-price-container" id="manualPriceContainer">
+                        <label for="manualPriceCt">Enter Price/CT</label>
+                        <input type="number" id="manualPriceCt" placeholder="Enter custom price/ct" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label for="diamondTotal">Total (Diamond)</label>
+                        <input type="number" id="diamondTotal" readonly>
+                    </div>
+                    <div class="form-group form-group-action">
+                        <button id="addDiamondBtn" class="btn btn-add">Add Diamond</button>
+                    </div>
+                </div>
+                <div class="table-responsive-wrapper">
+                    <table id="diamondTable">
+                        <thead>
+                            <tr>
+                                <th>Shape</th>
+                                <th>MM</th>
+                                <th>PCS</th>
+                                <th>Weight/PCS</th>
+                                <th>Total Weight CT</th>
+                                <th>Price/CT</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="totalDiamondAmount">Total Diamond Amount</label>
+                        <input type="number" id="totalDiamondAmount" readonly>
+                    </div>
+                     <div class="form-group" style="flex-grow:1;"></div>
+                </div>
+            </div>
+
+            <!-- QUOTATION SUMMARY -->
+            <div class="quotation-summary">
+                <h3 class="summary-title">Quotation Summary</h3>
+                <div class="summary-image-container">
+                    <img id="summaryImagePreview" src="#" alt="Item Image" class="summary-image-preview" style="display:none;">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Metal & Purity Details</label>
+                        <div id="summaryMetalPurity" class="summary-value">-</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Metal Amount (₹)</label>
+                        <div id="summaryMetalAmount" class="summary-value">0.00</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Metal Making Charges (₹)</label>
+                        <div id="summaryMetalMakingCharges" class="summary-value">0.00</div>
+                    </div>
+                </div>
+                <hr style="border: none; border-top: 1px solid var(--premium-border); margin: 25px 0;">
+                <div class="form-row">
+                     <div class="form-group">
+                        <label>Total Diamond Amount (₹)</label>
+                        <div id="summaryDiamondAmount" class="summary-value">0.00</div>
+                    </div>
+                    <div class="form-group" style="flex-basis: 100%; text-align:right;">
+                        <label id="finalQuotationLabel" style="font-size: 1.1rem; color: var(--premium-text); font-weight:600; margin-bottom:5px; display:block;">FINAL QUOTATION (₹)</label>
+                        <div id="finalQuotation" class="summary-value">0.00</div>
+                    </div>
+                </div>
+                <div class="table-responsive-wrapper">
+                    <table class="summary-table" id="detailedSummaryTable">
+                        <thead>
+                            <tr>
+                                <th>Item Details</th>
+                                <th>Metal Amount (₹)</th>
+                                <th>Making Charges (₹)</th>
+                                <th>Diamond Amount (₹)</th>
+                                <th>Total (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div> <!-- End of quotation-summary -->
+
+            <!-- Action Buttons Panel -->
+            <div class="form-action-buttons">
+                <button id="saveQuotationJsonBtn" class="btn btn-primary">Save Quotation</button>
+                <button id="downloadExcelBtn" class="btn btn-info">Download Excel</button>
+                <button id="resetQuotationBtn" class="btn btn-danger">Reset Quotation</button>
+            </div>
+
+        </div> <!-- End of form-body -->
+    </div> <!-- End of container -->
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="image-modal">
+        <span class="image-modal-close" id="imageModalClose">×</span>
+        <img class="image-modal-content" id="modalImageContent">
+        <div id="imageModalCaption"></div>
+    </div>
+
+    <!-- Custom Popup Modal -->
+    <div id="customPopupModal" class="popup-modal">
+        <div class="popup-modal-content">
+            <div class="popup-modal-header">
+                <span id="customPopupTitle"></span>
+                <span class="popup-modal-close-btn" id="customPopupCloseBtn">×</span>
+            </div>
+            <div class="popup-modal-body">
+                <p id="customPopupMessage"></p>
+            </div>
+            <div class="popup-modal-footer">
+                <button type="button" class="btn btn-popup-action" id="customPopupOkBtn">OK</button>
+                <button type="button" class="btn btn-popup-action" id="customPopupConfirmBtn" style="display: none;">Confirm</button>
+                <button type="button" class="btn btn-popup-action" id="customPopupCancelBtn" style="display: none;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="/js/script.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+            });
+    </script>
+</body>
+</html>
