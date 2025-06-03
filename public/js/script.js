@@ -1,134 +1,107 @@
-
 $(document).ready(function() {
     // Global variables
     let fetchedDiamondsData = [];
     let currentImageUrls = [];
     let metalPrices = {};
+    let currentQuotationId = null;
 
-    // DOM Elements
-    const $loadingSpinner = $('#loadingSpinner');
-
-    // Show loading spinner
-    function showLoading() {
-        $loadingSpinner.css('display', 'flex');
-    }
-
-    // Hide loading spinner
-    function hideLoading() {
-        $loadingSpinner.hide();
-    }
-
-    // --- START: Custom Popup Modal Logic ---
-    const popupModal = $('#customPopupModal');
-    const popupTitle = $('#customPopupTitle');
-    const popupMessage = $('#customPopupMessage');
-    const popupCloseBtn = $('#customPopupCloseBtn');
-    const popupOkBtn = $('#customPopupOkBtn');
-    const popupConfirmBtn = $('#customPopupConfirmBtn');
-    const popupCancelBtn = $('#customPopupCancelBtn');
-    const popupHeader = $('.popup-modal-header');
+    // DOM Elements (cached for performance)
+    const $elements = {
+        loadingSpinner: $('#loadingSpinner'),
+        popupModal: $('#customPopupModal'),
+        popupTitle: $('#customPopupTitle'),
+        popupMessage: $('#customPopupMessage'),
+        popupCloseBtn: $('#customPopupCloseBtn'),
+        popupOkBtn: $('#customPopupOkBtn'),
+        popupConfirmBtn: $('#customPopupConfirmBtn'),
+        popupCancelBtn: $('#customPopupCancelBtn'),
+        popupHeader: $('.popup-modal-header'),
+        imageModal: $('#imageModal'),
+        modalImageContent: $('#modalImageContent'),
+        imageModalCaption: $('#imageModalCaption'),
+        diamondShape: $('#diamondShape'),
+        shapeMmDropdown: $('#shapeMmDropdown'),
+        diamondMm: $('#diamondMm'),
+        priceCt: $('#priceCt'),
+        manualPriceContainer: $('#manualPriceContainer'),
+        manualPriceCt: $('#manualPriceCt'),
+        diamondPcs: $('#diamondPcs'),
+        weightPcs: $('#weightPcs'),
+        totalWeight: $('#totalWeight'),
+        diamondTotal: $('#diamondTotal'),
+        addDiamondBtn: $('#addDiamondBtn'),
+        itemImage: $('#itemImage'),
+        itemImagePreviews: $('#itemImagePreviews'),
+        summaryImagePreviews: $('#summaryImagePreviews'),
+        itemIdSku: $('#itemIdSku'),
+        itemCategory: $('#itemCategory'),
+        resetQuotationBtn: $('#resetQuotationBtn'),
+        saveQuotationJsonBtn: $('#saveQuotationJsonBtn'),
+        saveLoader: $('#saveLoader'),
+        totalDiamondAmount: $('#totalDiamondAmount'),
+        metalTable: $('#metalTable'),
+        diamondTable: $('#diamondTable'),
+        metalSummaryTable: $('#metalSummaryTable'),
+        metalEntriesContainer: $('#metalEntriesContainer'),
+        addMetalItemBtn: $('#addMetalItemBtn'),
+        summaryIdSku: $('#summaryIdSku'),
+        summaryCategory: $('#summaryCategory'),
+        imageModalClose: $('#imageModalClose'),
+        downloadExcelBtn: $('#downloadExcelBtn') // Added downloadExcelBtn
+    };
 
     let confirmationCallback = null;
 
+    // Check if SheetJS is loaded
+    if (typeof XLSX === 'undefined') {
+        console.error('SheetJS library is not loaded. Please include it.');
+        showPopup('Error: Excel library (SheetJS) is not loaded. Please check your setup.', 'error', 'Library Error');
+    }
+
+    // Debounce utility
+    function debounce(fn, delay) {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn(...args), delay);
+        };
+    }
+
+    // Popup Modal Logic
     function showPopup(message, type = 'info', title = 'Notification') {
-        // // console.log('showPopup called with:', { message, type, title });
-        try {
-            popupTitle.text(title || 'Notification');
-            popupMessage.html(message || 'No message provided');
-            popupHeader.removeClass('success error warning info').addClass(type);
-            popupOkBtn.show();
-            popupConfirmBtn.hide();
-            popupCancelBtn.hide();
-            popupModal.css('display', 'flex');
-        } catch (error) {
-            console.error('Error in showPopup:', error);
-        }
+        $elements.popupTitle.text(title);
+        $elements.popupMessage.html(message);
+        $elements.popupHeader.removeClass('success error warning info').addClass(type);
+        $elements.popupOkBtn.show();
+        $elements.popupConfirmBtn.hide();
+        $elements.popupCancelBtn.hide();
+        $elements.popupModal.css('display', 'flex');
     }
 
     function showConfirmation(message, title = 'Confirm Action', callback) {
-        // // console.log('showConfirmation called with:', { message, title });
-        popupTitle.text(title);
-        popupMessage.html(message);
+        $elements.popupTitle.text(title);
+        $elements.popupMessage.html(message);
         confirmationCallback = callback;
-        popupHeader.removeClass('success error warning info').addClass('warning');
-        popupOkBtn.hide();
-        popupConfirmBtn.show();
-        popupCancelBtn.show();
-        popupModal.css('display', 'flex');
+        $elements.popupHeader.removeClass('success error warning info').addClass('warning');
+        $elements.popupOkBtn.hide();
+        $elements.popupConfirmBtn.show();
+        $elements.popupCancelBtn.show();
+        $elements.popupModal.css('display', 'flex');
     }
 
     function hidePopup() {
-        popupModal.hide();
-    }
-
-    function resetConfirmationCallback() {
+        $elements.popupModal.hide();
         confirmationCallback = null;
     }
 
-    popupCloseBtn.on('click', function() {
-        if (confirmationCallback) {
-            confirmationCallback(false);
+    // Toast utility
+    function showToast(message, type = 'info', duration = 3000) {
+        const $toast = $(`<div class="toast ${type}"><span>${message}</span><button class="toast-close">×</button></div>`);
+        $('#toastContainer').append($toast);
+        if (duration > 0) {
+            setTimeout(() => $toast.addClass('hide').delay(300).queue(() => $toast.remove()), duration);
         }
-        hidePopup();
-        resetConfirmationCallback();
-    });
-
-    popupOkBtn.on('click', function() {
-        hidePopup();
-    });
-
-    popupConfirmBtn.on('click', function() {
-        // // console.log('Confirm button clicked');
-        if (confirmationCallback) {
-            popupModal.css('display', 'none');
-            confirmationCallback(true);
-        }
-        resetConfirmationCallback();
-    });
-
-    popupCancelBtn.on('click', function() {
-        if (confirmationCallback) {
-            confirmationCallback(false);
-        }
-        hidePopup();
-        resetConfirmationCallback();
-    });
-
-    popupModal.on('click', function(event) {
-        if (event.target === this) {
-            if (confirmationCallback) {
-                confirmationCallback(false);
-            }
-            hidePopup();
-            resetConfirmationCallback();
-        }
-    });
-    // --- END: Custom Popup Modal Logic ---
-
-    // Initialize image modal
-    $('#imageModal').hide();
-    $('#modalImageContent').attr('src', '');
-    $('#imageModalCaption').text('');
-
-    // Navbar toggle
-    const menu = document.getElementById('mobile-menu');
-    const navMenu = document.getElementById('nav-menu-list');
-
-    if (menu && navMenu) {
-        menu.addEventListener('click', () => {
-            menu.classList.toggle('is-active');
-            navMenu.classList.toggle('active');
-        });
-
-        const navLinks = navMenu.querySelectorAll('.nav-links');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (navMenu.classList.contains('active')) {
-                    menu.classList.remove('is-active');
-                    navMenu.classList.remove('active');
-                }
-            });
-        });
+        $toast.find('.toast-close').on('click', () => $toast.addClass('hide').delay(300).queue(() => $toast.remove()));
     }
 
     // Metal purity options
@@ -142,60 +115,16 @@ $(document).ready(function() {
         { value: "Platinum", text: "Platinum" }
     ];
 
-    // Fetch metal prices and diamond data
-    showLoading();
-    $.getJSON('/api/prices', function(data) {
-        metalPrices = data;
-        // // console.log('Metal prices fetched:', metalPrices);
-    }).fail(function(jqXHR, textStatus, errorThrown) {
-        console.error('Failed to fetch metal prices:', textStatus, errorThrown);
-        showPopup('Error: Could not load metal prices. Using default prices.', 'error', 'Metal Prices Load Error');
-        metalPrices = {
-            "10KT": 4410,
-            "14KT": 6077,
-            "18KT": 7448,
-            "22KT": 9016,
-            "24KT": 9800,
-            "Silver": 100,
-            "Platinum": 3200
-        };
-    }).always(function() {
-        $.getJSON('/api/diamonds', function(data) {
-            fetchedDiamondsData = data;
-            if (Array.isArray(fetchedDiamondsData)) {
-                fetchedDiamondsData = fetchedDiamondsData.map(d => ({...d, SHAPE: d.SHAPE ? d.SHAPE.trim() : ''}));
-            } else {
-                console.error("Fetched diamond data is not an array:", fetchedDiamondsData);
-                fetchedDiamondsData = [];
-            }
-            initializeDiamondSection();
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.error("Failed to fetch diamond data:", textStatus, errorThrown);
-            showPopup("Error: Could not load diamond data.", 'error', 'Data Load Error');
-            fetchedDiamondsData = [];
-            initializeDiamondSection();
-        }).always(function() {
-            setTimeout(() => {
-                // console.log('Hiding spinner after data fetches');
-                hideLoading();
-                createMetalEntryForm('#metalEntriesContainer', metalPurityOptions);
-            }, 100);
-        });
-    });
-
+    // Initialize Select2
     $('.shape-select, .shape-mm-select, .category-select').select2({ width: '100%', theme: 'default' });
 
-    function initializeSelect2ForMetalEntry(entryElement) {
-        entryElement.find('.metalPuritySelect').select2({ width: '100%', theme: 'default' });
+    function initializeSelect2ForMetalEntry($entry) {
+        $entry.find('.metalPuritySelect').select2({ width: '100%', theme: 'default' });
     }
 
-    function createMetalEntryForm(containerSelector, options) {
+    function createMetalEntryForm() {
         const entryId = `metalEntry-${Date.now()}`;
-        let optionsHtml = '<option value="">Select Metal & Purity</option>';
-        options.forEach(opt => {
-            optionsHtml += `<option value="${opt.value}">${opt.text}</option>`;
-        });
-
+        const optionsHtml = `<option value="">Select Metal & Purity</option>${metalPurityOptions.map(opt => `<option value="${opt.value}">${opt.text}</option>`).join('')}`;
         const entryHtml = `
             <div class="metal-entry" id="${entryId}" data-entry-type="metal">
                 <div class="form-row">
@@ -228,134 +157,138 @@ $(document).ready(function() {
             </div>
         `;
         const $newEntry = $(entryHtml);
-        $(containerSelector).append($newEntry);
+        $elements.metalEntriesContainer.append($newEntry);
         initializeSelect2ForMetalEntry($newEntry);
     }
 
     function initializeDiamondSection() {
-        const $diamondShapeSelect = $('#diamondShape');
-        $diamondShapeSelect.empty().append('<option value="">Select Shape</option>');
-
-        if (!fetchedDiamondsData || fetchedDiamondsData.length === 0) {
-            $diamondShapeSelect.append(`<option value="OTHER">OTHER</option>`);
-            $diamondShapeSelect.trigger('change');
+        $elements.diamondShape.empty().append('<option value="">Select Shape</option>');
+        if (!fetchedDiamondsData?.length) {
+            $elements.diamondShape.append('<option value="OTHER">OTHER</option>').trigger('change');
             return;
         }
 
-        const uniqueShapesSet = new Set(
-            fetchedDiamondsData.map(item => item.SHAPE ? item.SHAPE.trim() : null).filter(shape => shape)
-        );
-
-        let finalShapes = Array.from(uniqueShapesSet);
-        const otherIndex = finalShapes.indexOf("OTHER");
-        if (otherIndex > -1) {
-            finalShapes.splice(otherIndex, 1);
-        }
-        finalShapes.sort();
-        finalShapes.push("OTHER");
-
-        finalShapes.forEach(shape => {
-            $diamondShapeSelect.append(`<option value="${shape}">${shape}</option>`);
-        });
-        $diamondShapeSelect.trigger('change');
+        const uniqueShapes = [...new Set(fetchedDiamondsData.map(item => item.SHAPE?.trim()).filter(Boolean))].sort();
+        uniqueShapes.splice(uniqueShapes.indexOf("OTHER"), 1);
+        uniqueShapes.push("OTHER");
+        $elements.diamondShape.append(uniqueShapes.map(shape => `<option value="${shape}">${shape}</option>`).join('')).trigger('change');
     }
 
-    $('#addMetalItemBtn').on('click', function() {
-        showLoading();
-        $('#addMetalItemBtn').prop('disabled', true).addClass('disabled');
-        setTimeout(() => {
-            $('#metalEntriesContainer').empty();
-            createMetalEntryForm('#metalEntriesContainer', metalPurityOptions);
-            hideLoading();
-            $('#addMetalItemBtn').prop('disabled', false).removeClass('disabled');
-        }, 300);
+    // Fetch data
+    $elements.loadingSpinner.css('display', 'flex');
+    $.getJSON('/api/prices').done(data => {
+        metalPrices = data;
+    }).fail((jqXHR, textStatus, errorThrown) => {
+        console.error('Failed to fetch metal prices:', textStatus, errorThrown);
+        showPopup('Error: Could not load metal prices. Using default prices.', 'error', 'Metal Prices Load Error');
+        metalPrices = {
+            "10KT": 4410, "14KT": 6077, "18KT": 7448, "22KT": 9016, "24KT": 9800, "Silver": 100, "Platinum": 3200
+        };
+    }).always(() => {
+        $.getJSON('/api/diamonds').done(data => {
+            fetchedDiamondsData = Array.isArray(data) ? data.map(d => ({...d, SHAPE: d.SHAPE?.trim() || ''})) : [];
+            initializeDiamondSection();
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            console.error("Failed to fetch diamond data:", textStatus, errorThrown);
+            showPopup("Error: Could not load diamond data.", 'error', 'Data Load Error');
+            fetchedDiamondsData = [];
+            initializeDiamondSection();
+        }).always(() => {
+            setTimeout(() => {
+                $elements.loadingSpinner.hide();
+                createMetalEntryForm();
+            }, 100);
+        });
     });
 
-    $(document).on('change input', '.metal-entry .metalPuritySelect, .metal-entry .grm', function() {
-        const entry = $(this).closest('.metal-entry');
-        const grmVal = entry.find('.grm').val();
-        const grm = parseFloat(grmVal) || 0;
-        const selectedPurityValue = entry.find('.metalPuritySelect').val();
+    // Event Handlers
+    $elements.popupCloseBtn.on('click', () => {
+        if (confirmationCallback) confirmationCallback(false);
+        hidePopup();
+    });
 
-        if (grm > 0 && selectedPurityValue) {
-            const rateGrm = metalPrices[selectedPurityValue] || 0;
-            entry.find('.rateGrm').val(rateGrm.toFixed(2));
-            const totalMetal = grm * rateGrm;
-            entry.find('.totalMetalValue').val(totalMetal.toFixed(2));
-            let makingChargeRate;
-            if (['10KT', '14KT', '18KT', '22KT', '24KT'].includes(selectedPurityValue)) {
-                makingChargeRate = 800;
-            } else if (selectedPurityValue === 'Silver') {
-                makingChargeRate = 250;
-            } else if (selectedPurityValue === 'Platinum') {
-                makingChargeRate = 1250;
-            } else {
-                makingChargeRate = 0;
-            }
-            const makingCharges = makingChargeRate * grm;
-            entry.find('.makingCharges').val(makingCharges.toFixed(2));
-        } else {
-            entry.find('.rateGrm, .totalMetalValue, .makingCharges').val('');
+    $elements.popupOkBtn.on('click', hidePopup);
+
+    $elements.popupConfirmBtn.on('click', () => {
+        if (confirmationCallback) {
+            $elements.popupModal.hide();
+            confirmationCallback(true);
+            confirmationCallback = null;
         }
+    });
+
+    $elements.popupCancelBtn.on('click', () => {
+        if (confirmationCallback) confirmationCallback(false);
+        hidePopup();
+    });
+
+    $elements.popupModal.on('click', e => {
+        if (e.target === $elements.popupModal[0]) {
+            if (confirmationCallback) confirmationCallback(false);
+            hidePopup();
+        }
+    });
+
+    $elements.imageModal.hide();
+    $elements.addMetalItemBtn.on('click', () => {
+        $elements.loadingSpinner.css('display', 'flex');
+        $elements.addMetalItemBtn.prop('disabled', true).addClass('disabled');
+        setTimeout(() => {
+            $elements.metalEntriesContainer.empty();
+            createMetalEntryForm();
+            $elements.loadingSpinner.hide();
+            $elements.addMetalItemBtn.prop('disabled', false).removeClass('disabled');
+        }, 100);
+    });
+
+    const debouncedUpdateMetalEntry = debounce(function($entry) {
+        const grm = parseFloat($entry.find('.grm').val()) || 0;
+        const purity = $entry.find('.metalPuritySelect').val();
+        if (grm > 0 && purity) {
+            const rateGrm = metalPrices[purity] || 0;
+            $entry.find('.rateGrm').val(rateGrm.toFixed(2));
+            $entry.find('.totalMetalValue').val((grm * rateGrm).toFixed(2));
+            const makingChargeRate = { '10KT': 800, '14KT': 800, '18KT': 800, '22KT': 800, '24KT': 800, 'Silver': 250, 'Platinum': 1250 }[purity] || 0;
+            $entry.find('.makingCharges').val((makingChargeRate * grm).toFixed(2));
+        } else {
+            $entry.find('.rateGrm, .totalMetalValue, .makingCharges').val('');
+        }
+    }, 200);
+
+    $(document).on('change input', '.metal-entry .metalPuritySelect, .metal-entry .grm', function() {
+        debouncedUpdateMetalEntry($(this).closest('.metal-entry'));
     });
 
     function getTableHeaders($table) {
-        return $table.find('thead th').map((i, th) => $(th).text().trim()).get();
+        return $table.find('thead th').map((_, th) => $(th).text().trim()).get();
     }
 
     $(document).on('click', '.add-metal-entry-to-table', function() {
-        const entry = $(this).closest('.metal-entry');
-        const purityValue = entry.find('.metalPuritySelect').val();
-        const grm = entry.find('.grm').val();
-        const rateGrm = entry.find('.rateGrm').val();
-        const totalMetal = entry.find('.totalMetalValue').val();
-        const makingCharges = entry.find('.makingCharges').val();
+        const $entry = $(this).closest('.metal-entry');
+        const values = {
+            purity: $entry.find('.metalPuritySelect').val(),
+            grm: parseFloat($entry.find('.grm').val()) || 0,
+            rateGrm: parseFloat($entry.find('.rateGrm').val()) || 0,
+            totalMetal: parseFloat($entry.find('.totalMetalValue').val()) || 0,
+            makingCharges: parseFloat($entry.find('.makingCharges').val()) || 0
+        };
 
-        if (!purityValue || !grm || !rateGrm || !totalMetal || !makingCharges) {
-            showPopup('Please fill all metal fields.', 'warning', 'Incomplete Metal Details');
+        if (!values.purity || values.grm <= 0 || values.rateGrm <= 0 || values.totalMetal <= 0 || values.makingCharges <= 0) {
+            showPopup('Please fill all metal fields with valid positive values.', 'warning', 'Invalid Metal Values');
             return;
         }
 
-        const grmNum = parseFloat(grm);
-        const rateGrmNum = parseFloat(rateGrm);
-        const totalMetalNum = parseFloat(totalMetal);
-        const makingChargesNum = parseFloat(makingCharges);
+        const total = (values.totalMetal + values.makingCharges).toFixed(2);
+        const headers = getTableHeaders($elements.metalTable);
+        const rowHtml = `<tr>${[values.purity, values.grm.toFixed(2), values.rateGrm.toFixed(2), values.totalMetal.toFixed(2), values.makingCharges.toFixed(2), total, '<button class="btn btn-remove remove-metal-row">Remove</button>']
+            .map((val, i) => `<td data-label="${headers[i] || ''}">${val}</td>`).join('')}</tr>`;
 
-        if (isNaN(grmNum) || grmNum <= 0 ||
-            isNaN(rateGrmNum) || rateGrmNum <= 0 ||
-            isNaN(totalMetalNum) || totalMetalNum <= 0 ||
-            isNaN(makingChargesNum) || makingChargesNum <= 0) {
-            showPopup('Please enter valid positive values for all metal fields.', 'warning', 'Invalid Metal Values');
-            return;
-        }
-
-        const total = (totalMetalNum + makingChargesNum).toFixed(2);
-
-        const $table = $('#metalTable');
-        const headers = getTableHeaders($table);
-        const values = [
-            purityValue,
-            grmNum.toFixed(2),
-            rateGrmNum.toFixed(2),
-            totalMetalNum.toFixed(2),
-            makingChargesNum.toFixed(2),
-            total,
-            '<button class="btn btn-remove remove-metal-row">Remove</button>'
-        ];
-
-        let newRowHtml = '<tr>';
-        values.forEach((val, index) => {
-            newRowHtml += `<td data-label="${headers[index] || ''}">${val}</td>`;
-        });
-        newRowHtml += '</tr>';
-
-        $table.find('tbody').append(newRowHtml);
+        $elements.metalTable.find('tbody').append(rowHtml);
+        $entry.remove();
+        createMetalEntryForm();
         updateMetalSummaryTable();
         updateTotalMetalAmountsAndSummary();
-        entry.remove();
         showToast('Metal item added successfully!', 'success');
-
-        createMetalEntryForm('#metalEntriesContainer', metalPurityOptions);
     });
 
     $(document).on('click', '.remove-metal-row', function() {
@@ -364,25 +297,16 @@ $(document).ready(function() {
         updateTotalMetalAmountsAndSummary();
     });
 
-    function updateTotalMetalAmountsAndSummary() {
-        $('#summaryIdSku').text($('#itemIdSku').val().trim() || '-');
-        $('#summaryCategory').text($('#itemCategory').val() || '-');
-        updateMetalSummaryTable();
-    }
-
     function updateMetalSummaryTable() {
-        const $summaryTableBody = $('#metalSummaryTable tbody');
-        $summaryTableBody.empty();
-    
-        const headers = getTableHeaders($('#metalSummaryTable'));
-        const totalDiamondAmount = parseFloat($('#totalDiamondAmount').val()) || 0;
-    
-        $('#metalTable tbody tr').each(function() {
+        const $tbody = $elements.metalSummaryTable.find('tbody').empty();
+        const headers = getTableHeaders($elements.metalSummaryTable);
+        const totalDiamondAmount = parseFloat($elements.totalDiamondAmount.val()) || 0;
+
+        $elements.metalTable.find('tbody tr').each(function() {
             const $row = $(this);
             const totalMetal = parseFloat($row.find('td:nth-child(4)').text()) || 0;
             const makingCharges = parseFloat($row.find('td:nth-child(5)').text()) || 0;
             const total = (totalMetal + makingCharges + totalDiamondAmount).toFixed(2);
-    
             const values = [
                 $row.find('td:nth-child(1)').text(),
                 $row.find('td:nth-child(2)').text(),
@@ -392,190 +316,132 @@ $(document).ready(function() {
                 totalDiamondAmount.toFixed(2),
                 total
             ];
-    
-            let rowHtml = '<tr>';
-            values.forEach((val, index) => {
-                rowHtml += `<td data-label="${headers[index] || ''}">${val}</td>`;
-            });
-            rowHtml += '</tr>';
-            $summaryTableBody.append(rowHtml);
+            $tbody.append(`<tr>${values.map((val, i) => `<td data-label="${headers[i] || ''}">${val}</td>`).join('')}</tr>`);
         });
     }
 
-    $('#diamondShape').on('change', function() {
-        const selectedShape = $(this).val();
-        // console.log('Diamond Shape changed to:', selectedShape);
-        const $shapeMmDropdown = $('#shapeMmDropdown');
-        $shapeMmDropdown.empty().append('<option value="">Select Shape & MM</option>');
-        $('#diamondMm').val('').prop('readonly', false);
-        $('#priceCt').val('');
-        $('#manualPriceContainer').removeClass('visible').hide();
-        $('#manualPriceCt').val('');
+    function updateTotalMetalAmountsAndSummary() {
+        $elements.summaryIdSku.text($elements.itemIdSku.val().trim() || '-');
+        $elements.summaryCategory.text($elements.itemCategory.val() || '-');
+        updateMetalSummaryTable();
+    }
 
-        if (selectedShape === 'OTHER') {
-            $('#diamondMm').val('Other').prop('readonly', true);
-            $shapeMmDropdown.prop('disabled', true);
-            $('#manualPriceContainer').addClass('visible').show();
-            $('#priceCt').val('').prop('readonly', true);
-        } else if (selectedShape) {
-            $shapeMmDropdown.prop(' disabled', false);
-            const filteredDiamonds = fetchedDiamondsData.filter(d => d.SHAPE === selectedShape);
-            filteredDiamonds.forEach(diamond => {
-                $shapeMmDropdown.append(`<option value="${diamond["MM & SHAPE"]}" data-mm="${diamond.MM}" data-price="${diamond["PRICE/CT"]}">${diamond["MM & SHAPE"]}</option>`);
-            });
+    const debouncedCalculateDiamondTotal = debounce(calculateDiamondTotal, 200);
+
+    $elements.diamondShape.on('change', function() {
+        const shape = $(this).val();
+        $elements.shapeMmDropdown.empty().append('<option value="">Select Shape & MM</option>').prop('disabled', false);
+        $elements.diamondMm.val('').prop('readonly', false);
+        $elements.priceCt.val('');
+        $elements.manualPriceContainer.removeClass('visible').hide();
+        $elements.manualPriceCt.val('');
+
+        if (shape === 'OTHER') {
+            $elements.diamondMm.val('Other').prop('readonly', true);
+            $elements.shapeMmDropdown.prop('disabled', true);
+            $elements.manualPriceContainer.addClass('visible').show();
+            $elements.priceCt.prop('readonly', true);
+        } else if (shape) {
+            const filteredDiamonds = fetchedDiamondsData.filter(d => d.SHAPE === shape);
+            $elements.shapeMmDropdown.append(filteredDiamonds.map(d => 
+                `<option value="${d["MM & SHAPE"]}" data-mm="${d.MM}" data-price="${d["PRICE/CT"]}">${d["MM & SHAPE"]}</option>`).join(''));
         }
-        $shapeMmDropdown.trigger('change');
-        calculateDiamondTotal();
+        $elements.shapeMmDropdown.trigger('change');
+        debouncedCalculateDiamondTotal();
     });
 
-    $('#shapeMmDropdown').on('change', function() {
-        const selectedOption = $(this).find('option:selected');
-        const mmValue = selectedOption.data('mm');
-        const priceCt = selectedOption.data('price');
-
-        if (mmValue !== undefined) {
-            $('#diamondMm').val(mmValue);
-            $('#priceCt').val(priceCt !== undefined ? parseFloat(priceCt).toFixed(2) : '');
+    $elements.shapeMmDropdown.on('change', function() {
+        const $option = $(this).find('option:selected');
+        const mm = $option.data('mm');
+        const price = $option.data('price');
+        if (mm !== undefined) {
+            $elements.priceCt.val(price !== undefined ? parseFloat(price).toFixed(2) : '');
         } else {
-            if ($('#diamondShape').val() !== 'OTHER') {
-                $('#diamondMm').val('');
-            }
-            $('#priceCt').val('');
+            $elements.priceCt.val('');
         }
-        calculateDiamondTotal();
+        debouncedCalculateDiamondTotal();
     });
 
-    $('#manualPriceCt').on('input', function() {
-        if ($('#diamondShape').val() === 'OTHER') {
-            const manualPrice = parseFloat($(this).val()) || 0;
-            $('#priceCt').val(manualPrice.toFixed(2));
-            calculateDiamondTotal();
+    $elements.manualPriceCt.on('input', function() {
+        if ($elements.diamondShape.val() === 'OTHER') {
+            const price = parseFloat($(this).val()) || 0;
+            $elements.priceCt.val(price.toFixed(2));
+            debouncedCalculateDiamondTotal();
         }
     });
 
-    $('#diamondPcs, #weightPcs').on('input', function() {
-        calculateTotalWeight();
-        calculateDiamondTotal();
-    });
+    $elements.diamondPcs.on('input', () => { calculateTotalWeight(); debouncedCalculateDiamondTotal(); });
+    $elements.weightPcs.on('input', () => { calculateTotalWeight(); debouncedCalculateDiamondTotal(); });
 
-    $('#diamondMm').on('input', function() {
-        if ($('#diamondShape').val() === 'OTHER' || $('#shapeMmDropdown').val()) return;
-
-        const manualMm = $(this).val();
-        const selectedShape = $('#diamondShape').val();
-        $('#priceCt').val('');
-
-        if (selectedShape && manualMm) {
-            const matchingDiamond = fetchedDiamondsData.find(d => d.SHAPE === selectedShape && String(d.MM).trim() === String(manualMm).trim());
-            if (matchingDiamond) {
-                $('#priceCt').val(parseFloat(matchingDiamond["PRICE/CT"]).toFixed(2));
-                $('#shapeMmDropdown').val(matchingDiamond["MM & SHAPE"]).trigger('change.select2');
+    $elements.diamondMm.on('input', function() {
+        if ($elements.diamondShape.val() === 'OTHER' || $elements.shapeMmDropdown.val()) return;
+        const mm = $(this).val();
+        const shape = $elements.diamondShape.val();
+        $elements.priceCt.val('');
+        if (shape && mm) {
+            const diamond = fetchedDiamondsData.find(d => d.SHAPE === shape && String(d.MM).trim() === mm.trim());
+            if (diamond) {
+                $elements.priceCt.val(parseFloat(diamond["PRICE/CT"]).toFixed(2));
+                $elements.shapeMmDropdown.val(diamond["MM & SHAPE"]).trigger('change.select2');
             }
         }
-        calculateDiamondTotal();
+        debouncedCalculateDiamondTotal();
     });
 
     function calculateTotalWeight() {
-        const pcs = parseFloat($('#diamondPcs').val()) || 0;
-        const weightPcs = parseFloat($('#weightPcs').val()) || 0;
-        $('#totalWeight').val((pcs * weightPcs).toFixed(2));
+        const pcs = parseFloat($elements.diamondPcs.val()) || 0;
+        const weightPcs = parseFloat($elements.weightPcs.val()) || 0;
+        $elements.totalWeight.val((pcs * weightPcs).toFixed(2));
     }
 
     function calculateDiamondTotal() {
-        const totalWeight = parseFloat($('#totalWeight').val()) || 0;
-        let priceCtVal;
-
-        if ($('#diamondShape').val() === 'OTHER') {
-            priceCtVal = parseFloat($('#manualPriceCt').val()) || 0;
-            if (document.activeElement === document.getElementById('manualPriceCt')) {
-                $('#priceCt').val(priceCtVal.toFixed(2));
-            }
-        } else {
-            priceCtVal = parseFloat($('#priceCt').val()) || 0;
-        }
-
-        $('#diamondTotal').val((totalWeight * priceCtVal).toFixed(2));
+        const totalWeight = parseFloat($elements.totalWeight.val()) || 0;
+        const priceCt = parseFloat($elements.diamondShape.val() === 'OTHER' ? $elements.manualPriceCt.val() : $elements.priceCt.val()) || 0;
+        $elements.diamondTotal.val((totalWeight * priceCt).toFixed(2));
     }
 
-    $('#addDiamondBtn').on('click', function() {
-        showLoading();
-        $('#addDiamondBtn').prop('disabled', true).addClass('disabled');
+    $elements.addDiamondBtn.on('click', function() {
+        $elements.loadingSpinner.css('display', 'flex');
+        $elements.addDiamondBtn.prop('disabled', true).addClass('disabled');
 
-        const shape = $('#diamondShape').val();
-        const mm = $('#diamondMm').val();
-        const pcs = $('#diamondPcs').val();
-        const weightPcs = $('#weightPcs').val();
-        const totalWeight = $('#totalWeight').val();
-        const priceCtEntry = $('#priceCt').val();
-        const diamondTotalValue = $('#diamondTotal').val();
+        const values = {
+            shape: $elements.diamondShape.val()?.trim(),
+            mm: $elements.diamondMm.val()?.trim(),
+            pcs: parseFloat($elements.diamondPcs.val()) || 0,
+            weightPcs: parseFloat($elements.weightPcs.val()) || 0,
+            totalWeight: parseFloat($elements.totalWeight.val()) || 0,
+            priceCt: parseFloat($elements.priceCt.val()) || 0,
+            total: parseFloat($elements.diamondTotal.val()) || 0
+        };
 
-        // console.log('Adding diamond with values:', {
-        //     shape,
-        //     mm,
-        //     pcs,
-        //     weightPcs,
-        //     totalWeight,
-        //     priceCtEntry,
-        //     diamondTotalValue
-        // });
-
-        if (!shape || !shape.trim()) {
-            hideLoading();
-            $('#addDiamondBtn').prop('disabled', false).removeClass('disabled');
+        if (!values.shape) {
+            $elements.loadingSpinner.hide();
+            $elements.addDiamondBtn.prop('disabled', false).removeClass('disabled');
             showPopup('Please select a valid Shape.', 'warning', 'Invalid Shape');
             return;
         }
-        if (!mm || !pcs || !weightPcs || !totalWeight || !priceCtEntry || !diamondTotalValue) {
-            hideLoading();
-            $('#addDiamondBtn').prop('disabled', false).removeClass('disabled');
-            showPopup('Please fill all diamond fields.', 'warning', 'Incomplete Diamond Details');
-            return;
-        }
-
-        const pcsNum = parseFloat(pcs);
-        const weightPcsNum = parseFloat(weightPcs);
-        const totalWeightNum = parseFloat(totalWeight);
-        const priceCtNum = parseFloat(priceCtEntry);
-        const diamondTotalNum = parseFloat(diamondTotalValue);
-
-        if (isNaN(pcsNum) || pcsNum <= 0 ||
-            isNaN(weightPcsNum) || weightPcsNum <= 0 ||
-            isNaN(totalWeightNum) || totalWeightNum <= 0 ||
-            isNaN(priceCtNum) || priceCtNum <= 0 ||
-            isNaN(diamondTotalNum) || diamondTotalNum <= 0) {
-            hideLoading();
-            $('#addDiamondBtn').prop('disabled', false).removeClass('disabled');
-            showPopup('Please enter valid positive values for diamond fields.', 'warning', 'Invalid Diamond Values');
+        if (!values.mm || values.pcs <= 0 || values.weightPcs <= 0 || values.totalWeight <= 0 || values.priceCt <= 0 || values.total <= 0) {
+            $elements.loadingSpinner.hide();
+            $elements.addDiamondBtn.prop('disabled', false).removeClass('disabled');
+            showPopup('Please fill all diamond fields with valid positive values.', 'warning', 'Invalid Diamond Values');
             return;
         }
 
         setTimeout(() => {
-            const $table = $('#diamondTable');
-            const headers = getTableHeaders($table);
-            const values = [
-                shape.trim(),
-                mm.trim(),
-                pcsNum.toFixed(0),
-                weightPcsNum.toFixed(2),
-                totalWeightNum.toFixed(2),
-                priceCtNum.toFixed(2),
-                diamondTotalNum.toFixed(2),
-                '<button class="btn btn-remove remove-diamond">Remove</button>'
-            ];
+            const headers = getTableHeaders($elements.diamondTable);
+            const selectedMm = $elements.shapeMmDropdown.find('option:selected').data('mm')?.toString().trim() || values.mm;
+            const rowHtml = `<tr data-selected-mm-value="${selectedMm.replace(/"/g, '&quot;')}">${[
+                values.shape, values.mm, values.pcs.toFixed(0), values.weightPcs.toFixed(2), values.totalWeight.toFixed(2),
+                values.priceCt.toFixed(2), values.total.toFixed(2), '<button class="btn btn-remove remove-diamond">Remove</button>'
+            ].map((val, i) => `<td data-label="${headers[i] || ''}">${val}</td>`).join('')}</tr>`;
 
-            let newRowHtml = '<tr>';
-            values.forEach((val, index) => {
-                newRowHtml += `<td data-label="${headers[index] || ''}">${val}</td>`;
-            });
-            newRowHtml += '</tr>';
-
-            $table.find('tbody').append(newRowHtml);
+            $elements.diamondTable.find('tbody').append(rowHtml);
             updateTotalDiamondAmount();
             resetDiamondForm();
-            hideLoading();
-            $('#addDiamondBtn').prop('disabled', false).removeClass('disabled');
+            $elements.loadingSpinner.hide();
+            $elements.addDiamondBtn.prop('disabled', false).removeClass('disabled');
             showToast('Diamond item added successfully!', 'success');
-        }, 300);
+        }, 100);
     });
 
     $(document).on('click', '.remove-diamond', function() {
@@ -584,82 +450,67 @@ $(document).ready(function() {
     });
 
     function resetDiamondForm() {
-        $('#diamondShape').val('').trigger('change');
-        $('#diamondMm').val('');
-        $('#diamondPcs').val('');
-        $('#weightPcs').val('');
-        $('#totalWeight').val('');
-        $('#manualPriceCt').val('');
-        $('#priceCt').val('');
-        $('#diamondTotal').val('');
+        $elements.diamondShape.val('').trigger('change');
+        $elements.diamondMm.val('');
+        $elements.diamondPcs.val('');
+        $elements.weightPcs.val('');
+        $elements.totalWeight.val('');
+        $elements.manualPriceCt.val('');
+        $elements.priceCt.val('');
+        $elements.diamondTotal.val('');
     }
 
     function updateTotalDiamondAmount() {
         let total = 0;
-        $('#diamondTable tbody tr').each(function() {
-            const totalValue = parseFloat($(this).find('td:nth-child(7)').text()) || 0;
-            total += totalValue;
+        $elements.diamondTable.find('tbody tr').each(function() {
+            total += parseFloat($(this).find('td:nth-child(7)').text()) || 0;
         });
-        $('#totalDiamondAmount').val(total.toFixed(2));
+        $elements.totalDiamondAmount.val(total.toFixed(2));
         updateTotalMetalAmountsAndSummary();
     }
 
     function renderImagePreviews() {
-        const $previewsContainer = $('#itemImagePreviews');
-        $previewsContainer.empty();
-        currentImageUrls = currentImageUrls.filter(url => url && url.startsWith('https://raw.githubusercontent.com/'));
-        // console.log('Rendering image previews, currentImageUrls:', currentImageUrls.length);
+        $elements.itemImagePreviews.empty();
+        currentImageUrls = currentImageUrls.filter(url => url?.startsWith('https://raw.githubusercontent.com/'));
         currentImageUrls.forEach((url, index) => {
-            if (url && url.startsWith('https://raw.githubusercontent.com/')) {
-                const $previewWrapper = $('<div class="image-preview-wrapper"></div>');
-                const $img = $(`<img class="image-preview-input" src="${url}" alt="Image Preview ${index + 1}" data-index="${index}">`);
-                const $removeBtn = $(`<button class="btn-remove-image" data-index="${index}" aria-label="Remove image ${index + 1}">X</button>`);
-                $previewWrapper.append($img).append($removeBtn);
-                $previewsContainer.append($previewWrapper);
+            if (url) {
+                $elements.itemImagePreviews.append(
+                    `<div class="image-preview-wrapper"><img class="image-preview-input" src="${url}" alt="Image Preview ${index + 1}" data-index="${index}" loading="lazy"><button class="btn-remove-image" data-index="${index}" aria-label="Remove image ${index + 1}">X</button></div>`
+                );
             }
         });
         $('.image-input-wrapper').toggleClass('has-image', currentImageUrls.length > 0);
-        $('#imageInputText').text(currentImageUrls.length > 0 ? `${currentImageUrls.length} image(s) uploaded` : 'Click to upload or drag & drop');
+        $elements.itemImagePreviews.prev('.image-input-wrapper').find('#imageInputText').text(currentImageUrls.length > 0 ? `${currentImageUrls.length} image(s) uploaded` : 'Click to upload or drag & drop');
+        renderSummaryImagePreviews();
     }
 
     function renderSummaryImagePreviews() {
-        const $summaryPreviewsContainer = $('#summaryImagePreviews');
-        $summaryPreviewsContainer.empty();
-        currentImageUrls = currentImageUrls.filter(url => url && url.startsWith('https://raw.githubusercontent.com/'));
-        // console.log('Rendering summary image previews, currentImageUrls:', currentImageUrls.length);
+        $elements.summaryImagePreviews.empty();
         currentImageUrls.forEach((url, index) => {
-            if (url && url.startsWith('https://raw.githubusercontent.com/')) {
-                const $previewWrapper = $('<div class="image-preview-wrapper"></div>');
-                const $img = $(`<img class="summary-image-preview" src="${url}" alt="Summary Image ${index + 1}" data-index="${index}">`);
-                const $removeBtn = $(`<button class="btn-remove-image" data-index="${index}" aria-label="Remove image ${index + 1}">X</button>`);
-                $previewWrapper.append($img).append($removeBtn);
-                $summaryPreviewsContainer.append($previewWrapper);
+            if (url) {
+                $elements.summaryImagePreviews.append(
+                    `<div class="image-preview-wrapper"><img class="summary-image-preview" src="${url}" alt="Summary Image ${index + 1}" data-index="${index}" loading="lazy"><button class="btn-remove-image" data-index="${index}" aria-label="Remove image ${index + 1}">X</button></div>`
+                );
             }
         });
     }
 
-    $('.image-input-wrapper').on('dragover', function(e) {
+    $('.image-input-wrapper').on('dragover', e => {
         e.preventDefault();
-        e.stopPropagation();
-        $(this).addClass('dragover');
-    }).on('dragleave', function(e) {
+        $(e.currentTarget).addClass('dragover');
+    }).on('dragleave', e => {
         e.preventDefault();
-        e.stopPropagation();
-        $(this).removeClass('dragover');
-    }).on('drop', function(e) {
+        $(e.currentTarget).removeClass('dragover');
+    }).on('drop', e => {
         e.preventDefault();
-        e.stopPropagation();
-        $(this).removeClass('dragover');
+        $(e.currentTarget).removeClass('dragover');
         const files = e.originalEvent.dataTransfer.files;
-        if (files && files.length > 0) {
-            uploadImagesToGitHub(files);
-        }
+        if (files?.length) uploadImagesToGitHub(files);
     });
 
-    $('#itemImage').on('change', function(event) {
-        const files = event.target.files;
-        if (files && files.length > 0) {
-            uploadImagesToGitHub(files);
+    $elements.itemImage.on('change', function() {
+        if (this.files?.length) {
+            uploadImagesToGitHub(this.files);
             $(this).val('');
         }
     });
@@ -677,177 +528,135 @@ $(document).ready(function() {
             validImages = true;
         });
 
-        if (!validImages) {
-            return;
-        }
+        if (!validImages) return;
 
-        showLoading();
-
+        $elements.loadingSpinner.css('display', 'flex');
         const uploadTimeout = setTimeout(() => {
-            hideLoading();
+            $elements.loadingSpinner.hide();
             showPopup('Image upload timed out. Please try again.', 'error', 'Upload Timeout');
-        }, 30000);
+        }, 15000);
 
-        fetch('/api/upload-image', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            clearTimeout(uploadTimeout);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.imageUrls && Array.isArray(data.imageUrls)) {
-                currentImageUrls.push(...data.imageUrls);
-                renderImagePreviews();
-                renderSummaryImagePreviews();
-                hideLoading();
-                showPopup('Images uploaded successfully!', 'success', 'Image Upload Successful');
-            } else {
-                throw new Error('Invalid response from server');
-            }
-        })
-        .catch(error => {
-            console.error('Error uploading images:', error);
-            clearTimeout(uploadTimeout);
-            hideLoading();
-            showPopup(`Error: Failed to upload images. ${error.message}`, 'error', 'Image Upload Failed');
-        });
+        fetch('/api/upload-image', { method: 'POST', body: formData })
+            .then(response => {
+                clearTimeout(uploadTimeout);
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                if (Array.isArray(data.imageUrls)) {
+                    currentImageUrls.push(...data.imageUrls);
+                    renderImagePreviews();
+                    $elements.loadingSpinner.hide();
+                    showPopup('Images uploaded successfully!', 'success', 'Image Upload Successful');
+                } else {
+                    throw new Error('Invalid response from server');
+                }
+            })
+            .catch(error => {
+                console.error('Error uploading images:', error);
+                clearTimeout(uploadTimeout);
+                $elements.loadingSpinner.hide();
+                showPopup(`Error: Failed to upload images. ${error.message}`, 'error', 'Image Upload Failed');
+            });
     }
 
-    $(document).on('click', '.btn-remove-image', function(event) {
-        event.stopPropagation();
+    $(document).on('click', '.btn-remove-image', function(e) {
+        e.stopPropagation();
         const index = $(this).data('index');
         const url = currentImageUrls[index];
-
-        showConfirmation('Are you sure you want to delete this image?', 'Confirm Deletion', function(confirmed) {
+        showConfirmation('Are you sure you want to delete this image?', 'Confirm Deletion', confirmed => {
             if (confirmed) {
-                showLoading();
+                $elements.loadingSpinner.css('display', 'flex');
                 fetch('/api/delete-image', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ url })
                 })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
-                    }
+                    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
                     return response.json();
                 })
                 .then(() => {
                     currentImageUrls.splice(index, 1);
                     renderImagePreviews();
-                    renderSummaryImagePreviews();
-                    hideLoading();
+                    $elements.loadingSpinner.hide();
                     showPopup('Image deleted successfully!', 'success', 'Image Deletion Successful');
                 })
                 .catch(error => {
                     console.error('Error deleting image:', error);
-                    hideLoading();
+                    $elements.loadingSpinner.hide();
                     showPopup(`Error: Failed to delete image. ${error.message}`, 'error', 'Image Deletion Failed');
                 });
             }
         });
     });
 
-    $('#itemIdSku').on('input', function() {
-        updateTotalMetalAmountsAndSummary();
-    });
+    $elements.itemIdSku.on('input', updateTotalMetalAmountsAndSummary);
+    $elements.itemCategory.on('change', updateTotalMetalAmountsAndSummary);
 
-    $('#itemCategory').on('change', function() {
-        updateTotalMetalAmountsAndSummary();
-    });
-
-    $('#resetQuotationBtn').on('click', function() {
-        showConfirmation('Are you sure you want to reset all fields?', 'Confirm Reset', function(confirmed) {
+    $elements.resetQuotationBtn.on('click', () => {
+        showConfirmation('Are you sure you want to reset all fields?', 'Confirm Reset', confirmed => {
             if (confirmed) {
-                showLoading();
+                $elements.loadingSpinner.css('display', 'flex');
                 setTimeout(() => {
                     try {
-                        $('input[type="text"], input[type="number"]').val('');
-                        $('select.category-select, select.shape-select, select.shape-mm-select').val('').trigger('change');
-                        currentImageUrls = [];
-                        renderImagePreviews();
-                        renderSummaryImagePreviews();
-                        $('#metalTable tbody').empty();
-                        $('#diamondTable tbody').empty();
-                        $('#metalSummaryTable tbody').empty();
-                        $('#metalEntriesContainer').empty();
-                        createMetalEntryForm('#metalEntriesContainer', metalPurityOptions);
-                        $('#summaryIdSku').text('-');
-                        $('#summaryCategory').text('-');
-                        $('#totalDiamondAmount').val('');
-                        updateTotalMetalAmountsAndSummary();
-                        updateTotalDiamondAmount();
-                        $('#imageModal').hide();
-                        $('#modalImageContent').attr('src', '');
-                        $('#imageModalCaption').text('');
-                        hideLoading();
+                        resetQuotationForm();
+                        $elements.loadingSpinner.hide();
                         showPopup('Quotation form reset.', 'success', 'Form Reset');
                     } catch (error) {
                         console.error('Error during reset:', error);
-                        hideLoading();
+                        $elements.loadingSpinner.hide();
                         showPopup(`Error: Failed to reset quotation. ${error.message}`, 'error', 'Reset Failed');
                     }
-                }, 300);
+                }, 100);
             }
         });
     });
-    function showToast(message, type = 'info', duration = 5000) {
-        const toastContainer = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        
-        const messageSpan = document.createElement('span');
-        messageSpan.textContent = message;
-        
-        const closeButton = document.createElement('button');
-        closeButton.className = 'toast-close';
-        closeButton.innerHTML = '&times;';
-        closeButton.onclick = () => hideToast(toast);
-        
-        toast.appendChild(messageSpan);
-        toast.appendChild(closeButton);
-        toastContainer.appendChild(toast);
-        
-        // Auto-hide after duration
-        if (duration > 0) {
-          setTimeout(() => hideToast(toast), duration);
-        }
-        
-        return toast;
-      }
-      
-      function hideToast(toast) {
-        toast.classList.add('hide');
-        setTimeout(() => toast.remove(), 300);
-      }
+
+    function resetQuotationForm() {
+        $('input[type="text"], input[type="number"]').val('');
+        $('select.category-select, select.shape-select, select.shape-mm-select').val('').trigger('change');
+        currentImageUrls = [];
+        renderImagePreviews();
+        $elements.metalTable.find('tbody').empty();
+        $elements.diamondTable.find('tbody').empty();
+        $elements.metalSummaryTable.find('tbody').empty();
+        $elements.metalEntriesContainer.empty();
+        createMetalEntryForm();
+        $elements.summaryIdSku.text('-');
+        $elements.summaryCategory.text('-');
+        $elements.totalDiamondAmount.val('');
+        $elements.imageModal.hide();
+        $elements.modalImageContent.attr('src', '');
+        $elements.imageModalCaption.text('');
+        currentQuotationId = null;
+        updateTotalMetalAmountsAndSummary();
+        updateTotalDiamondAmount();
+    }
+
     function getQuotationData(includeIdAndDate = true) {
         const quotationData = {
             identification: {
-                idSku: $('#itemIdSku').val().trim(),
-                category: $('#itemCategory').val(),
+                idSku: $elements.itemIdSku.val().trim(),
+                category: $elements.itemCategory.val(),
                 images: currentImageUrls
             },
             metalItems: [],
             diamondItems: [],
             summary: {
-                idSku: $('#summaryIdSku').text(),
-                category: $('#summaryCategory').text(),
-                totalDiamondAmount: $('#totalDiamondAmount').val() || '0.00',
+                idSku: $elements.summaryIdSku.text(),
+                category: $elements.summaryCategory.text(),
+                totalDiamondAmount: $elements.totalDiamondAmount.val() || '0.00',
                 metalSummary: []
             }
         };
 
         if (includeIdAndDate) {
-            // quotationData.quotationId = getNextQuotationIdForStorage();
+            quotationData.quotationId = currentQuotationId;
             quotationData.quotationDate = new Date().toISOString();
         }
 
-        $('#metalTable tbody tr').each(function() {
+        $elements.metalTable.find('tbody tr').each(function() {
             const $row = $(this);
             quotationData.metalItems.push({
                 purity: $row.find('td:nth-child(1)').text().trim(),
@@ -859,11 +668,14 @@ $(document).ready(function() {
             });
         });
 
-        $('#diamondTable tbody tr').each(function() {
+        $elements.diamondTable.find('tbody tr').each(function() {
             const $row = $(this);
+            const userEnteredMm = $row.find('td:nth-child(2)').text().trim();
+            const selectedMm = $row.data('selected-mm-value') !== undefined ? String($row.data('selected-mm-value')) : userEnteredMm;
             quotationData.diamondItems.push({
                 shape: $row.find('td:nth-child(1)').text().trim(),
-                mm: $row.find('td:nth-child(2)').text().trim(),
+                mm: selectedMm,
+                userMM: userEnteredMm,
                 pcs: $row.find('td:nth-child(3)').text().trim(),
                 weightPerPiece: $row.find('td:nth-child(4)').text().trim(),
                 totalWeightCt: $row.find('td:nth-child(5)').text().trim(),
@@ -872,7 +684,7 @@ $(document).ready(function() {
             });
         });
 
-        $('#metalSummaryTable tbody tr').each(function() {
+        $elements.metalSummaryTable.find('tbody tr').each(function() {
             const $row = $(this);
             quotationData.summary.metalSummary.push({
                 purity: $row.find('td:nth-child(1)').text().trim(),
@@ -888,235 +700,148 @@ $(document).ready(function() {
         return quotationData;
     }
 
-    // function getNextQuotationIdForStorage() {
-    //     let lastId = localStorage.getItem('lastQuotationId');
-    //     lastId = lastId ? parseInt(lastId, 10) : 0;
-    //     const nextId = lastId + 1;
-    //     localStorage.setItem('lastQuotationId', nextId);
-    //     return `Q-${String(nextId).padStart(5, '0')}`;
-    // }
+    $elements.saveQuotationJsonBtn.on('click', function() {
+        const idSku = $elements.itemIdSku.val().trim();
+        const category = $elements.itemCategory.val();
+        const totalDiamondAmount = $elements.totalDiamondAmount.val();
+        const metalRows = $elements.metalTable.find('tbody tr');
+        const metalSummaryRows = $elements.metalSummaryTable.find('tbody tr');
 
-    $('#saveQuotationJsonBtn').on('click', function() {
-        // Validate required fields
-        const idSku = $('#itemIdSku').val().trim();
-        const category = $('#itemCategory').val();
-        const totalDiamondAmount = $('#totalDiamondAmount').val();
-        const metalRows = $('#metalTable tbody tr');
-        const metalSummaryRows = $('#metalSummaryTable tbody tr');
-    
-        if (!idSku) {
-            showPopup('Please enter an ID SKU.', 'warning', 'Validation Error');
+        if (!idSku || !category || metalRows.length === 0 || metalSummaryRows.length === 0 || !totalDiamondAmount || isNaN(totalDiamondAmount) || parseFloat(totalDiamondAmount) < 0) {
+            showPopup('Please complete all required fields.', 'warning', 'Validation Error');
             return;
         }
-        if (!category) {
-            showPopup('Please select a category.', 'warning', 'Validation Error');
-            return;
-        }
-        if (metalRows.length === 0) {
-            showPopup('Please add at least one metal item.', 'warning', 'Validation Error');
-            return;
-        }
-        if (metalSummaryRows.length === 0) {
-            showPopup('Please add at least one metal summary item.', 'warning', 'Validation Error');
-            return;
-        }
-        if (!totalDiamondAmount || isNaN(totalDiamondAmount) || parseFloat(totalDiamondAmount) < 0) {
-            showPopup('Please enter a valid total diamond amount.', 'warning', 'Validation Error');
-            return;
-        }
-    
-        // Get quotation data (without quotationId)
+
         const quotationData = getQuotationData();
-        
-        // Show loading state
-        showLoading();
-        $('#saveQuotationJsonBtn').prop('disabled', true).addClass('disabled');
-        $('#saveLoader').show();
-    
-        // Send data to server
+        $elements.loadingSpinner.css('display', 'flex');
+        $elements.saveQuotationJsonBtn.prop('disabled', true).addClass('disabled');
+        $elements.saveLoader.show();
+
         $.ajax({
             url: '/api/save-quotation',
             method: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(quotationData),
-            success: function(response) {
-                console.log('Quotation saved successfully:', response);
-                hideLoading();
-                $('#saveLoader').hide();
-                $('#saveQuotationJsonBtn').prop('disabled', false).removeClass('disabled');
-                showPopup(`Quotation ${response.quotationId} saved successfully!`, 'success', 'Save Successful');
-                resetQuotationForm();
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Failed to save quotation:', textStatus, errorThrown);
-                let errorMessage = 'Failed to save quotation.';
-                if (jqXHR.responseJSON && jqXHR.responseJSON.error) {
-                    errorMessage += ` ${jqXHR.responseJSON.error.message}`;
-                }
-                hideLoading();
-                $('#saveLoader').hide();
-                $('#saveQuotationJsonBtn').prop('disabled', false).removeClass('disabled');
-                showPopup(errorMessage, 'error', 'Save Failed');
-            }
+            data: JSON.stringify(quotationData)
+        }).done(response => {
+            currentQuotationId = response.quotationId;
+            $elements.loadingSpinner.hide();
+            $elements.saveLoader.hide();
+            $elements.saveQuotationJsonBtn.prop('disabled', false).removeClass('disabled');
+            showPopup(`Quotation ${currentQuotationId} saved successfully!`, 'success', 'Save Successful');
+        }).fail((jqXHR, textStatus, errorThrown) => {
+            console.error('Failed to save quotation:', textStatus, errorThrown);
+            $elements.loadingSpinner.hide();
+            $elements.saveLoader.hide();
+            $elements.saveQuotationJsonBtn.prop('disabled', false).removeClass('disabled');
+            showPopup(`Failed to save quotation. ${jqXHR.responseJSON?.error?.message || ''}`, 'error', 'Save Failed');
         });
     });
 
-    function resetQuotationForm() {
-        $('input[type="text"], input[type="number"]').val('');
-        $('select.category-select, select.shape-select, select.shape-mm-select').val('').trigger('change');
-        currentImageUrls = [];
-        renderImagePreviews();
-        renderSummaryImagePreviews();
-        $('#metalTable tbody').empty();
-        $('#diamondTable tbody').empty();
-        $('#metalSummaryTable tbody').empty();
-        $('#metalEntriesContainer').empty();
-        createMetalEntryForm('#metalEntriesContainer', metalPurityOptions);
-        $('#summaryIdSku').text('-');
-        $('#summaryCategory').text('-');
-        $('#totalDiamondAmount').val('');
-        updateTotalMetalAmountsAndSummary();
-        updateTotalDiamondAmount();
-        $('#imageModal').hide();
-        $('#modalImageContent').attr('src', '');
-        $('#imageModalCaption').text('');
-    }
+    $elements.downloadExcelBtn.on('click', function() {
+        console.log('Download Excel button clicked'); // Debug log
+        if (typeof XLSX === 'undefined') {
+            showPopup('Error: Excel library (SheetJS) is not loaded. Please check your setup.', 'error', 'Library Error');
+            return;
+        }
 
-    $('#downloadExcelBtn').on('click', function() {
-        // console.log('Download Excel button clicked');
-        const quotationData = getQuotationData(true); // Include quotationId and quotationDate
+        const quotationData = getQuotationData(true);
         if (!quotationData.identification.idSku || !quotationData.identification.category ||
             quotationData.metalItems.length === 0 || quotationData.diamondItems.length === 0) {
             showPopup('Please complete all required fields before downloading.', 'warning', 'Incomplete Data');
             return;
         }
-    
-        const wb = XLSX.utils.book_new();
-    
-        // Identification Details Sheet
-        const identificationData = [{
-            'Quotation ID': quotationData.quotationId || 'N/A',
-            'SKU ID': quotationData.identification.idSku,
-            'Category': quotationData.identification.category,
-            'Date': quotationData.quotationDate ? new Date(quotationData.quotationDate).toLocaleString() : 'N/A',
-            'Images': quotationData.identification.images.join(', ')
-        }];
-        const identificationWs = XLSX.utils.json_to_sheet(identificationData);
-        XLSX.utils.book_append_sheet(wb, identificationWs, 'Identification');
-    
-        // Metal Details Sheet
-        const metalData = quotationData.metalItems.map((item, index) => ({
-            'S.No': index + 1,
-            'Metal & Purity': item.purity,
-            'Grams': item.grams,
-            'Rate/Gram (₹)': item.ratePerGram,
-            'Total Metal (₹)': item.totalMetal,
-            'Making Charges (₹)': item.makingCharges,
-            'Total (₹)': item.total
-        }));
-        const metalWs = XLSX.utils.json_to_sheet(metalData);
-        XLSX.utils.book_append_sheet(wb, metalWs, 'Metal Details');
-    
-        // Diamond Details Sheet
-        const diamondData = quotationData.diamondItems.map((item, index) => ({
-            'S.No': index + 1,
-            'Shape': item.shape,
-            'MM': item.mm,
-            'PCS': item.pcs,
-            'Weight/PCS': item.weightPerPiece,
-            'Total Weight/CT': item.totalWeightCt,
-            'Price/CT': item.pricePerCt,
-            'Total (₹)': item.total
-        }));
-        const diamondWs = XLSX.utils.json_to_sheet(diamondData);
-        XLSX.utils.book_append_sheet(wb, diamondWs, 'Diamond Details');
-    
-        // Summary Sheet
-        const summaryData = quotationData.summary.metalSummary.map((item, index) => ({
-            'S.No': index + 1,
-            'Metal & Purity': item.purity,
-            'Grams': item.grams,
-            'Rate/Gram (₹)': item.ratePerGram,
-            'Total Metal (₹)': item.totalMetal,
-            'Making Charges (₹)': item.makingCharges,
-            'Total Diamond Amount (₹)': item.totalDiamondAmount,
-            'Total (₹)': item.total
-        }));
-        // Add identification details at the top of the summary sheet
-        summaryData.unshift(
-            {
-                'S.No': '',
-                'Metal & Purity': 'Quotation ID',
-                'Grams': quotationData.quotationId || 'N/A',
-                'Rate/Gram (₹)': '',
-                'Total Metal (₹)': '',
-                'Making Charges (₹)': '',
-                'Total Diamond Amount (₹)': '',
-                'Total (₹)': ''
-            },
-            {
-                'S.No': '',
-                'Metal & Purity': 'SKU ID',
-                'Grams': quotationData.identification.idSku,
-                'Rate/Gram (₹)': '',
-                'Total Metal (₹)': '',
-                'Making Charges (₹)': '',
-                'Total Diamond Amount (₹)': '',
-                'Total (₹)': ''
-            },
-            {
-                'S.No': '',
-                'Metal & Purity': 'Category',
-                'Grams': quotationData.identification.category,
-                'Rate/Gram (₹)': '',
-                'Total Metal (₹)': '',
-                'Making Charges (₹)': '',
-                'Total Diamond Amount (₹)': '',
-                'Total (₹)': ''
-            },
-            {
-                'S.No': '',
-                'Metal & Purity': 'Date',
-                'Grams': quotationData.quotationDate ? new Date(quotationData.quotationDate).toLocaleString() : 'N/A',
-                'Rate/Gram (₹)': '',
-                'Total Metal (₹)': '',
-                'Making Charges (₹)': '',
-                'Total Diamond Amount (₹)': '',
-                'Total (₹)': ''
-            }
-        );
-        const summaryWs = XLSX.utils.json_to_sheet(summaryData);
-        XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');
-    
-        const fileName = `Quotation_${quotationData.identification.idSku || 'Untitled'}_${new Date().toISOString().split('T')[0]}.xlsx`;
-        XLSX.writeFile(wb, fileName);
-        showPopup('Excel file downloaded successfully!', 'success', 'Download Successful');
+
+        try {
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet([{
+                'Quotation ID': quotationData.quotationId || 'N/A',
+                'SKU ID': quotationData.identification.idSku,
+                'Category': quotationData.identification.category,
+                'Date': quotationData.quotationDate ? new Date(quotationData.quotationDate).toLocaleString() : 'N/A',
+                'Images': quotationData.identification.images.join(', ')
+            }]), 'Identification');
+
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(
+                quotationData.metalItems.map((item, index) => ({
+                    'S.No': index + 1, 'Metal & Purity': item.purity, 'Grams': item.grams, 'Rate/Gram (₹)': item.ratePerGram,
+                    'Total Metal (₹)': item.totalMetal, 'Making Charges (₹)': item.makingCharges, 'Total (₹)': item.total
+                }))
+            ), 'Metal Details');
+
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(
+                quotationData.diamondItems.map((item, index) => ({
+                    'S.No': index + 1, 'Shape': item.shape, 'Selected MM': item.mm, 'Entered MM': item.userMM,
+                    'PCS': item.pcs, 'Weight/PCS': item.weightPerPiece, 'Total Weight/CT': item.totalWeightCt,
+                    'Price/CT': item.pricePerCt, 'Total (₹)': item.total
+                }))
+            ), 'Diamond Details');
+
+            const summaryData = quotationData.summary.metalSummary.map((item, index) => ({
+                'S.No': index + 1,
+                'Metal & Purity': item.purity,
+                'Grams': item.grams,
+                'Rate/Gram (₹)': item.ratePerGram,
+                'Total Metal (₹)': item.totalMetal,
+                'Making Charges (₹)': item.makingCharges, // Fixed the key name
+                'Total Diamond Amount (₹)': item.totalDiamondAmount,
+                'Total (₹)': item.total
+            })).concat([
+                { 'S.No': '', 'Metal & Purity': 'Quotation ID', 'Grams': quotationData.quotationId || 'N/A' },
+                { 'S.No': '', 'Metal & Purity': 'SKU ID', 'Grams': quotationData.identification.idSku },
+                { 'S.No': '', 'Metal & Purity': 'Category', 'Grams': quotationData.identification.category },
+                { 'S.No': '', 'Metal & Purity': 'Date', 'Grams': quotationData.quotationDate ? new Date(quotationData.quotationDate).toLocaleString() : 'N/A' }
+            ]);
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(summaryData), 'Summary');
+
+            const baseName = quotationData.identification.idSku || quotationData.quotationId || 'Untitled';
+            XLSX.writeFile(wb, `Quotation_${baseName}_${new Date().toISOString().split('T')[0]}.xlsx`);
+            showPopup('Excel file downloaded successfully!', 'success', 'Download Successful');
+        } catch (error) {
+            console.error('Error generating Excel file:', error);
+            showPopup(`Error: Failed to generate Excel file. ${error.message}`, 'error', 'Download Failed');
+        }
     });
 
     $(document).on('click', '.image-preview-input, .summary-image-preview', function() {
         const src = $(this).attr('src');
         const index = $(this).data('index');
-        $('#modalImageContent').attr('src', src);
-        $('#imageModalCaption').text(`Image ${index + 1}`);
-        $('#imageModal').show();
+        $elements.modalImageContent.attr('src', src).attr('loading', 'lazy');
+        $elements.imageModalCaption.text(`Image ${index + 1}`);
+        $elements.imageModal.show();
     });
 
-    $('#imageModalClose').on('click', function() {
-        $('#imageModal').hide();
-        $('#modalImageContent').attr('src', '');
-        $('#imageModalCaption').text('');
+    $elements.imageModalClose.on('click', () => {
+        $elements.imageModal.hide();
+        $elements.modalImageContent.attr('src', '');
+        $elements.imageModalCaption.text('');
     });
 
-    $('#imageModal').on('click', function(event) {
-        if (event.target === this) {
-            $('#imageModal').hide();
-            $('#modalImageContent').attr('src', '');
-            $('#imageModalCaption').text('');
+    $elements.imageModal.on('click', e => {
+        if (e.target === $elements.imageModal[0]) {
+            $elements.imageModal.hide();
+            $elements.modalImageContent.attr('src', '');
+            $elements.imageModalCaption.text('');
         }
     });
 
+    // Navbar toggle
+    const menu = document.getElementById('mobile-menu');
+    const navMenu = document.getElementById('nav-menu-list');
+    if (menu && navMenu) {
+        menu.addEventListener('click', () => {
+            menu.classList.toggle('is-active');
+            navMenu.classList.toggle('active');
+        });
+        navMenu.querySelectorAll('.nav-links').forEach(link => {
+            link.addEventListener('click', () => {
+                if (navMenu.classList.contains('active')) {
+                    menu.classList.remove('is-active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+    }
+
     updateTotalMetalAmountsAndSummary();
     updateTotalDiamondAmount();
-
-    
 });

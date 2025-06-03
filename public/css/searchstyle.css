@@ -883,3 +883,26 @@ th {
 .no-results-container {
     font-size: 20px;
 }
+.pagination-btn {
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.pagination-btn:hover {
+    background: var(--primary-hover-color);
+    transform: scale(1.05);
+    box-shadow: var(--shadow-medium);
+}
+
+[data-theme="dark"] .pagination-btn {
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+}

@@ -1,129 +1,99 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
-    const diamondsTableBody = document.getElementById('diamondsTableBody');
-    const addDiamondBtn = document.getElementById('addDiamondBtn');
-    const diamondModal = document.getElementById('diamondModal');
-    const closeBtn = document.querySelector('.close-btn');
-    const diamondForm = document.getElementById('diamondForm');
-    const modalTitle = document.getElementById('modalTitle');
-    const diamondIdInput = document.getElementById('diamondId');
-    const shapeInput = document.getElementById('shape');
-    const mmNumberInput = document.getElementById('mmNumber');
-    const mmTextInput = document.getElementById('mmText');
-    const priceInput = document.getElementById('price');
-    const toast = document.getElementById('toast');
-    const loadingSpinner = document.getElementById('loadingSpinner');
-    const shapeFilter = document.getElementById('shapeFilter');
-    const mmFilter = document.getElementById('mmFilter');
-    const resetConfirmation = document.getElementById('resetConfirmation');
-    const resetFiltersBtn = document.getElementById('resetFiltersBtn');
-    const deleteModal = document.getElementById('deleteModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
-    const deleteCloseBtn = document.querySelector('.delete-close-btn');
-    const backToTopBtn = document.getElementById('backToTop');
-    const topToBackBtn = document.getElementById('topToBack');
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements (cached for performance)
+    const elements = {
+        diamondsTableBody: document.getElementById('diamondsTableBody'),
+        addDiamondBtn: document.getElementById('addDiamondBtn'),
+        diamondModal: document.getElementById('diamondModal'),
+        closeBtn: document.querySelector('.close-btn'),
+        diamondForm: document.getElementById('diamondForm'),
+        modalTitle: document.getElementById('modalTitle'),
+        diamondIdInput: document.getElementById('diamondId'),
+        shapeInput: document.getElementById('shape'),
+        mmNumberInput: document.getElementById('mmNumber'),
+        mmTextInput: document.getElementById('mmText'),
+        priceInput: document.getElementById('price'),
+        toast: document.getElementById('toast'),
+        loadingSpinner: document.getElementById('loadingSpinner'),
+        shapeFilter: document.getElementById('shapeFilter'),
+        mmFilter: document.getElementById('mmFilter'),
+        resetConfirmation: document.getElementById('resetConfirmation'),
+        resetFiltersBtn: document.getElementById('resetFiltersBtn'),
+        deleteModal: document.getElementById('deleteModal'),
+        confirmDeleteBtn: document.getElementById('confirmDeleteBtn'),
+        cancelDeleteBtn: document.getElementById('cancelDeleteBtn'),
+        deleteCloseBtn: document.querySelector('.delete-close-btn'),
+        backToTopBtn: document.getElementById('backToTop'),
+        topToBackBtn: document.getElementById('topToBack'),
+        deleteDiamondId: document.getElementById('deleteDiamondId')
+    };
+
     let diamondsData = [];
     let isEditMode = false;
-    
+
+    // Debounce utility
+    const debounce = (fn, delay) => {
+        let timeout;
+        return (...args) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => fn(...args), delay);
+        };
+    };
+
     // Initialize the app
-    init();
-    
-    function init() {
+    const init = () => {
         fetchDiamonds();
         setupEventListeners();
         updateScrollButtonsVisibility();
-    }
-    
-    function setupEventListeners() {
-        // Modal controls
-        addDiamondBtn.addEventListener('click', openAddModal);
-        closeBtn.addEventListener('click', closeModal);
-        diamondForm.addEventListener('submit', handleFormSubmit);
-        
-        // Delete modal controls
-        deleteCloseBtn.addEventListener('click', closeDeleteModal);
-        cancelDeleteBtn.addEventListener('click', closeDeleteModal);
-        confirmDeleteBtn.addEventListener('click', handleDelete);
-        
-        // Shape change handler to toggle MM input type
-        shapeInput.addEventListener('change', toggleMMInput);
-        
-        // Filter controls
-        shapeFilter.addEventListener('change', function() {
-            const selectedShape = this.value;
-            updateMMFilter(diamondsData, selectedShape || null);
-            filterDiamonds();
-        });
-        
-        mmFilter.addEventListener('change', filterDiamonds);
-        
-        // Close modals when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target === diamondModal) {
-                closeModal();
-            }
-            if (event.target === deleteModal) {
-                closeDeleteModal();
-            }
-        });
-        
-        resetFiltersBtn.addEventListener('click', resetFilters);
-        
-        // Scroll button controls
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-        
-        topToBackBtn.addEventListener('click', () => {
-            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        });
+    };
 
-        // Scroll event to show/hide buttons
-        window.addEventListener('scroll', updateScrollButtonsVisibility);
-    }
+    const setupEventListeners = () => {
+        elements.addDiamondBtn.addEventListener('click', openAddModal);
+        elements.closeBtn.addEventListener('click', closeModal);
+        elements.diamondForm.addEventListener('submit', handleFormSubmit);
+        elements.deleteCloseBtn.addEventListener('click', closeDeleteModal);
+        elements.cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+        elements.confirmDeleteBtn.addEventListener('click', handleDelete);
+        elements.shapeInput.addEventListener('change', toggleMMInput);
+        elements.shapeFilter.addEventListener('change', () => {
+            updateMMFilter(diamondsData, elements.shapeFilter.value || null);
+            debouncedFilterDiamonds();
+        });
+        elements.mmFilter.addEventListener('change', debouncedFilterDiamonds);
+        elements.resetFiltersBtn.addEventListener('click', resetFilters);
+        elements.backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        elements.topToBackBtn.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
+        window.addEventListener('click', e => {
+            if (e.target === elements.diamondModal) closeModal();
+            if (e.target === elements.deleteModal) closeDeleteModal();
+        });
+        window.addEventListener('scroll', debounce(updateScrollButtonsVisibility, 100));
+    };
 
-    function updateScrollButtonsVisibility() {
-        
-            backToTopBtn.classList.add('visible');
-            topToBackBtn.classList.add('visible');
-            if (window.scrollY > 100) {
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
-            }
-    }
-    
-    function toggleMMInput() {
-        const shape = shapeInput.value;
-        if (shape === 'ROUND') {
-            mmNumberInput.style.display = 'block';
-            mmTextInput.style.display = 'none';
-            mmTextInput.value = '';
-        } else {
-            mmNumberInput.style.display = 'none';
-            mmTextInput.style.display = 'block';
-            mmNumberInput.value = '';
-        }
-    }
-    
-    function resetFilters() {
-        shapeFilter.value = '';
-        mmFilter.value = '';
+    const updateScrollButtonsVisibility = () => {
+        const isScrolled = window.scrollY > 100;
+        elements.backToTopBtn.classList.toggle('visible', isScrolled);
+        elements.topToBackBtn.classList.toggle('visible', !isScrolled);
+        document.body.classList.toggle('scrolled', isScrolled);
+    };
+
+    const toggleMMInput = () => {
+        const isRound = elements.shapeInput.value === 'ROUND';
+        elements.mmNumberInput.style.display = isRound ? 'block' : 'none';
+        elements.mmTextInput.style.display = isRound ? 'none' : 'block';
+        elements[isRound ? 'mmTextInput' : 'mmNumberInput'].value = '';
+    };
+
+    const resetFilters = () => {
+        elements.shapeFilter.value = '';
+        elements.mmFilter.value = '';
         updateMMFilter(diamondsData);
         renderDiamonds(diamondsData);
-        showResetConfirmation();
-    }
-    
-    function showResetConfirmation() {
-        resetConfirmation.classList.add('show');
-        setTimeout(() => {
-            resetConfirmation.classList.remove('show');
-        }, 3000);
-    }
-    
-    async function fetchDiamonds() {
-        showLoading();
+        elements.resetConfirmation.classList.add('show');
+        setTimeout(() => elements.resetConfirmation.classList.remove('show'), 2000);
+    };
+
+    const fetchDiamonds = async () => {
+        elements.loadingSpinner.classList.add('active');
         try {
             const response = await fetch('/api/diamonds');
             if (!response.ok) throw new Error('Failed to fetch diamonds');
@@ -135,286 +105,208 @@ document.addEventListener('DOMContentLoaded', function() {
             showToast('Error loading diamonds', 'error');
             console.error('Error:', error);
         } finally {
-            hideLoading();
+            elements.loadingSpinner.classList.remove('active');
         }
-    }
-    
-    function updateShapeDropdown(diamonds) {
+    };
+
+    const updateShapeDropdown = diamonds => {
         const shapes = [...new Set(diamonds.map(d => d.SHAPE))].sort();
-        shapeInput.innerHTML = '<option value="">Select Shape</option>';
-        shapes.forEach(shape => {
-            const option = document.createElement('option');
-            option.value = shape;
-            option.textContent = shape;
-            shapeInput.appendChild(option);
-        });
-    }
-    
-    function renderDiamonds(diamonds) {
-        diamondsTableBody.innerHTML = '';
-        
-        if (diamonds.length === 0) {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td colspan="6" class="no-data">No diamonds found</td>`;
-            diamondsTableBody.appendChild(row);
-            return;
-        }
-        
-        diamonds.forEach(diamond => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${diamond.id}</td>
-                <td>${diamond.SHAPE}</td>
-                <td>${diamond.MM}</td>
-                <td>${diamond['MM & SHAPE']}</td>
-                <td>Rs.${diamond['PRICE/CT'].toLocaleString()}</td>
-                <td class="action-buttons">
-                    <button class="btn warning edit-btn" data-id="${diamond.id}">
-                        <i class="fas fa-edit"></i> Edit
-                    </button>
-                    <button class="btn danger delete-btn" data-id="${diamond.id}">
-                        <i class="fas fa-trash"></i> Delete
-                    </button>
-                </td>
-            `;
-            
-            const editBtn = row.querySelector('.edit-btn');
-            const deleteBtn = row.querySelector('.delete-btn');
-            
-            editBtn.addEventListener('click', () => openEditModal(diamond.id));
-            deleteBtn.addEventListener('click', () => openDeleteModal(diamond.id));
-            
-            diamondsTableBody.appendChild(row);
-        });
-    }
-    
-    function updateFilters(diamonds) {
-        const shapes = [...new Set(diamonds.map(d => d.SHAPE))];
-        shapeFilter.innerHTML = '<option value="">All Shapes</option>';
-        shapes.forEach(shape => {
-            const option = document.createElement('option');
-            option.value = shape;
-            option.textContent = shape;
-            shapeFilter.appendChild(option);
-        });
-        
+        elements.shapeInput.innerHTML = `<option value="">Select Shape</option>${shapes.map(shape => `<option value="${shape}">${shape}</option>`).join('')}`;
+    };
+
+    const renderDiamonds = diamonds => {
+        elements.diamondsTableBody.innerHTML = diamonds.length ? 
+            diamonds.map(diamond => `
+                <tr>
+                    <td>${diamond.id}</td>
+                    <td>${diamond.SHAPE}</td>
+                    <td>${diamond.MM}</td>
+                    <td>${diamond['MM & SHAPE']}</td>
+                    <td>Rs.${diamond['PRICE/CT'].toLocaleString()}</td>
+                    <td class="action-buttons">
+                        <button class="btn warning edit-btn" data-id="${diamond.id}"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn danger delete-btn" data-id="${diamond.id}"><i class="fas fa-trash"></i> Delete</button>
+                    </td>
+                </tr>
+            `).join('') : 
+            '<tr><td colspan="6" class="no-data">No diamonds found</td></tr>';
+
+        elements.diamondsTableBody.querySelectorAll('.edit-btn').forEach(btn => 
+            btn.addEventListener('click', () => openEditModal(parseInt(btn.dataset.id)))
+        );
+        elements.diamondsTableBody.querySelectorAll('.delete-btn').forEach(btn => 
+            btn.addEventListener('click', () => openDeleteModal(parseInt(btn.dataset.id)))
+        );
+    };
+
+    const updateFilters = diamonds => {
+        const shapes = [...new Set(diamonds.map(d => d.SHAPE))].sort();
+        elements.shapeFilter.innerHTML = `<option value="">All Shapes</option>${shapes.map(shape => `<option value="${shape}">${shape}</option>`).join('')}`;
         updateMMFilter(diamonds);
-    }
-    
-    function updateMMFilter(diamonds, selectedShape = null) {
-        let filteredDiamonds = diamonds;
-        if (selectedShape) {
-            filteredDiamonds = diamonds.filter(d => d.SHAPE === selectedShape);
-        }
-        const mms = [...new Set(filteredDiamonds.map(d => d.MM))].sort();
-        mmFilter.innerHTML = '<option value="">All Sizes</option>';
-        mms.forEach(mm => {
-            const option = document.createElement('option');
-            option.value = mm;
-            option.textContent = mm;
-            mmFilter.appendChild(option);
-        });
-    }
-    
-    function filterDiamonds() {
-        const shapeValue = shapeFilter.value;
-        const mmValue = mmFilter.value;
-        
-        let filtered = diamondsData;
-        if (shapeValue) {
-            filtered = filtered.filter(d => d.SHAPE === shapeValue);
-        }
-        if (mmValue) {
-            filtered = filtered.filter(d => d.MM == mmValue);
-        }
+    };
+
+    const updateMMFilter = (diamonds, selectedShape = null) => {
+        const filtered = selectedShape ? diamonds.filter(d => d.SHAPE === selectedShape) : diamonds;
+        const mms = [...new Set(filtered.map(d => d.MM))].sort();
+        elements.mmFilter.innerHTML = `<option value="">All Sizes</option>${mms.map(mm => `<option value="${mm}">${mm}</option>`).join('')}`;
+    };
+
+    const filterDiamonds = () => {
+        const shape = elements.shapeFilter.value;
+        const mm = elements.mmFilter.value;
+        const filtered = diamondsData.filter(d => 
+            (!shape || d.SHAPE === shape) && (!mm || d.MM == mm)
+        );
         renderDiamonds(filtered);
-    }
-    
-    function openAddModal() {
+    };
+
+    const debouncedFilterDiamonds = debounce(filterDiamonds, 200);
+
+    const openAddModal = () => {
         isEditMode = false;
-        modalTitle.textContent = 'Add New Diamond';
-        diamondForm.reset();
-        diamondIdInput.value = '';
+        elements.modalTitle.textContent = 'Add New Diamond';
+        elements.diamondForm.reset();
+        elements.diamondIdInput.value = '';
         toggleMMInput();
-        diamondModal.style.display = 'block';
-    }
-    
-    function openEditModal(id) {
+        elements.diamondModal.style.display = 'block';
+    };
+
+    const openEditModal = id => {
         isEditMode = true;
-        modalTitle.textContent = 'Edit Diamond';
-        
+        elements.modalTitle.textContent = 'Edit Diamond';
         const diamond = diamondsData.find(d => d.id === id);
         if (!diamond) {
             showToast('Diamond not found', 'error');
             return;
         }
-        
-        diamondIdInput.value = diamond.id;
-        shapeInput.value = diamond.SHAPE;
+        elements.diamondIdInput.value = diamond.id;
+        elements.shapeInput.value = diamond.SHAPE;
         toggleMMInput();
         if (diamond.SHAPE === 'ROUND') {
-            mmNumberInput.value = parseFloat(diamond.MM);
-            mmTextInput.value = '';
+            elements.mmNumberInput.value = parseFloat(diamond.MM);
+            elements.mmTextInput.value = '';
         } else {
-            mmTextInput.value = diamond.MM;
-            mmNumberInput.value = '';
+            elements.mmTextInput.value = diamond.MM;
+            elements.mmNumberInput.value = '';
         }
-        priceInput.value = parseFloat(diamond['PRICE/CT']);
-        
-        diamondModal.style.display = 'block';
-    }
-    
-    function openDeleteModal(id) {
-        document.getElementById('deleteDiamondId').value = id;
-        deleteModal.style.display = 'block';
-    }
-    
-    function closeModal() {
-        diamondModal.style.display = 'none';
-    }
-    
-    function closeDeleteModal() {
-        deleteModal.style.display = 'none';
-        document.getElementById('deleteDiamondId').value = '';
-    }
-    
-    async function handleFormSubmit(e) {
+        elements.priceInput.value = parseFloat(diamond['PRICE/CT']);
+        elements.diamondModal.style.display = 'block';
+    };
+
+    const openDeleteModal = id => {
+        elements.deleteDiamondId.value = id;
+        elements.deleteModal.style.display = 'block';
+    };
+
+    const closeModal = () => {
+        elements.diamondModal.style.display = 'none';
+    };
+
+    const closeDeleteModal = () => {
+        elements.deleteModal.style.display = 'none';
+        elements.deleteDiamondId.value = '';
+    };
+
+    const handleFormSubmit = async e => {
         e.preventDefault();
-    
-        const shape = shapeInput.value;
-        const mm = shape === 'ROUND' ? parseFloat(mmNumberInput.value) : mmTextInput.value;
-        const price = parseFloat(priceInput.value);
-    
-        const diamondData = {
-            SHAPE: shape,
-            MM: mm,
-            'PRICE/CT': price
-        };
-    
-        // Validate inputs
-        if (!diamondData.SHAPE || !diamondData.MM || isNaN(diamondData['PRICE/CT'])) {
+        const shape = elements.shapeInput.value;
+        const mm = shape === 'ROUND' ? parseFloat(elements.mmNumberInput.value) : elements.mmTextInput.value;
+        const price = parseFloat(elements.priceInput.value);
+        const diamondData = { SHAPE: shape, MM: mm, 'PRICE/CT': price };
+
+        if (!shape || !mm || isNaN(price)) {
             showToast('Please fill all fields with valid values', 'error');
             return;
         }
-    
-        if (shape === 'ROUND' && isNaN(diamondData.MM)) {
+        if (shape === 'ROUND' && isNaN(mm)) {
             showToast('MM must be a number for ROUND shape', 'error');
             return;
         }
-    
-        showLoading();
-    
+
+        elements.loadingSpinner.classList.add('active');
         try {
-            let response;
-            let successMessage;
-    
+            let response, updatedDiamond, successMessage;
             if (isEditMode) {
-                const id = parseInt(diamondIdInput.value);
+                const id = parseInt(elements.diamondIdInput.value);
                 response = await fetch(`/api/diamonds/${id}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(diamondData)
                 });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'Unknown error occurred');
+                }
+                updatedDiamond = (await response.json()).diamond;
+                diamondsData = diamondsData.map(d => d.id === updatedDiamond.id ? updatedDiamond : d);
                 successMessage = 'Diamond updated successfully';
             } else {
                 response = await fetch('/api/diamonds', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(diamondData)
                 });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error?.message || 'Unknown error occurred');
+                }
+                updatedDiamond = await response.json();
+                diamondsData.push(updatedDiamond);
                 successMessage = 'Diamond added successfully';
             }
-    
-            if (!response.ok) {
-                const errorData = await response.json();
-                const errorMessage = errorData.error?.message || 'Unknown error occurred';
-                throw new Error(errorMessage);
-            }
-    
-            closeModal();
-            await fetchDiamonds();
-            // Fetch metadata to refresh any UI displaying quotations
+            renderDiamonds(diamondsData);
+            updateFilters(diamondsData);
+            updateShapeDropdown(diamondsData);
             await fetchMetadata();
+            closeModal();
             showToast(successMessage, 'success');
         } catch (error) {
             showToast(`Error saving diamond: ${error.message}`, 'error');
             console.error('Error:', error);
         } finally {
-            hideLoading();
+            elements.loadingSpinner.classList.remove('active');
         }
-    }
-    
-    // Add function to fetch metadata
-    async function fetchMetadata() {
+    };
+
+    const fetchMetadata = async () => {
         try {
             const response = await fetch('/api/metadata');
             if (!response.ok) throw new Error('Failed to fetch metadata');
-            const metadata = await response.json();
-            // Update UI if you have a metadata table or display
-            // Example: renderMetadata(metadata);
+            await response.json();
         } catch (error) {
             showToast('Error loading metadata', 'error');
             console.error('Error:', error);
         }
-    }
-    
-    async function handleDelete() {
-        const id = parseInt(document.getElementById('deleteDiamondId').value);
+    };
+
+    const handleDelete = async () => {
+        const id = parseInt(elements.deleteDiamondId.value);
         if (!id) return;
-        
-        showLoading();
-        
+
+        elements.loadingSpinner.classList.add('active');
         try {
-            const response = await fetch(`/api/diamonds/${id}`, {
-                method: 'DELETE'
-            });
-            
+            const response = await fetch(`/api/diamonds/${id}`, { method: 'DELETE' });
             if (!response.ok) throw new Error('Failed to delete diamond');
-            
+            diamondsData = diamondsData.filter(d => d.id !== id);
+            renderDiamonds(diamondsData);
+            updateFilters(diamondsData);
+            updateShapeDropdown(diamondsData);
             closeDeleteModal();
-            await fetchDiamonds();
             showToast('Diamond deleted successfully', 'success');
         } catch (error) {
             showToast('Error deleting diamond', 'error');
             console.error('Error:', error);
         } finally {
-            hideLoading();
+            elements.loadingSpinner.classList.remove('active');
         }
-    }
-    
-    function showToast(message, type = 'success') {
-        toast.textContent = message;
-        toast.className = 'toast';
-        
-        switch (type) {
-            case 'success':
-                toast.style.backgroundColor = 'var(--success-color)';
-                break;
-            case 'error':
-                toast.style.backgroundColor = 'var(--danger-color)';
-                break;
-            case 'warning':
-                toast.style.backgroundColor = 'var(--warning-color)';
-                break;
-            default:
-                toast.style.backgroundColor = 'var(--info-color)';
-        }
-        
-        toast.classList.add('show');
-        setTimeout(() => {
-            toast.classList.remove('show');
-        }, 3000);
-    }
-    
-    function showLoading() {
-        loadingSpinner.classList.add('active');
-    }
-    
-    function hideLoading() {
-        loadingSpinner.classList.remove('active');
-    }
-}); 
+    };
+
+    const showToast = (message, type = 'success') => {
+        elements.toast.textContent = message;
+        elements.toast.className = `toast show ${type}`;
+        elements.toast.style.backgroundColor = `var(--${type}-color)`;
+        setTimeout(() => elements.toast.classList.remove('show'), 2000);
+    };
+
+    init();
+});

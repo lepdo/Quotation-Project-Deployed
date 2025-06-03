@@ -76,6 +76,20 @@ function sanitizeData(obj) {
     return result;
 }
 
+// Helper function to get the next sequential ID
+async function getNextId(counterName) {
+    const counterRef = db.collection('counters').doc(counterName);
+    return db.runTransaction(async (transaction) => {
+        const counterDoc = await transaction.get(counterRef);
+        let nextId = 1;
+        if (counterDoc.exists) {
+            nextId = counterDoc.data().currentId + 1;
+        }
+        transaction.set(counterRef, { currentId: nextId }, { merge: true });
+        return nextId;
+    });
+}
+
 // Updated endpoint to handle image uploads to GitHub with compression
 app.post('/api/upload-image', upload.array('images'), async (req, res) => {
     try {
@@ -213,9 +227,7 @@ app.post('/api/diamonds', async (req, res) => {
             });
         }
 
-        const snapshot = await db.collection('diamonds').get();
-        const maxId = snapshot.empty ? 0 : Math.max(...snapshot.docs.map(doc => parseInt(doc.id)));
-        newDiamond.id = maxId + 1;
+        newDiamond.id = await getNextId('diamonds');
         newDiamond['MM & SHAPE'] = `${newDiamond.SHAPE}-${newDiamond.MM} MM`;
 
         await db.collection('diamonds').doc(newDiamond.id.toString()).set(sanitizeData(newDiamond));
@@ -308,7 +320,13 @@ app.put('/api/diamonds/:id', async (req, res) => {
             if (!diamondDoc.exists) {
                 throw new Error('Diamond not found');
             }
-
+            // FUTURE OPTIMIZATION:
+            // Instead of fetching all metadata, query for metadata documents
+            // that are likely to contain the updated diamond. This would require
+            // denormalizing some diamond identifiers (e.g., an array of diamond 'MM & SHAPE' or IDs)
+            // into the metadata documents for more efficient querying.
+            // Example: const q = db.collection('metadata').where('diamond_identifiers', 'array-contains', diamondData['MM & SHAPE']);
+            // For now, we fetch all and filter/process, which is less efficient at scale.
             const metadataSnapshot = await transaction.get(db.collection('metadata'));
             const metadataDocs = metadataSnapshot.docs.filter(doc => !doc.data().storedInCloudStorage);
 
@@ -422,6 +440,8 @@ app.put('/api/diamonds/:id', async (req, res) => {
 
         // Handle Cloud Storage updates
         const cloudUpdates = [];
+        // FUTURE OPTIMIZATION: Similar to above, query more selectively.
+        // For now, fetching all metadata marked for cloud storage.
         const metadataCloudSnapshot = await db.collection('metadata')
             .where('storedInCloudStorage', '==', true)
             .get();
@@ -547,40 +567,145 @@ app.delete('/api/diamonds/:id', async (req, res) => {
     }
 });
 
-// Get all quotations
+// Get all quotations (summary view) with pagination and filtering
 app.get('/api/metadata', async (req, res) => {
     res.set('Cache-Control', 'no-cache');
     try {
-        const snapshot = await db.collection('metadata').get();
-        const metadata = [];
-        for (const doc of snapshot.docs) {
-            const data = doc.data();
-            if (data.storedInCloudStorage) {
-                try {
-                    const file = bucket.file(data.storagePath);
-                    const [contents] = await file.download();
-                    metadata.push(JSON.parse(contents.toString()));
-                } catch (storageErr) {
-                    console.error(`Error downloading quotation ${doc.id} from Cloud Storage:`, storageErr);
-                    continue;
-                }
-            } else {
-                // Fetch subcollections with consistent reads
-                const [diamondItemsSnapshot, metalItemsSnapshot, metalSummarySnapshot] = await Promise.all([
-                    db.collection('metadata').doc(doc.id).collection('diamondItems').get(),
-                    db.collection('metadata').doc(doc.id).collection('metalItems').get(),
-                    db.collection('metadata').doc(doc.id).collection('metalSummary').get()
-                ]);
-                data.diamondItems = diamondItemsSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                data.metalItems = metalItemsSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                data.summary.metalSummary = metalSummarySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-                metadata.push(data);
+        const {
+            limit = 10, // Default limit
+            startAfter, // For pagination: ID of the last doc from the previous page
+            search,
+            category,
+            sku,
+            dateFrom,
+            dateTo
+        } = req.query;
+
+        let query = db.collection('metadata');
+
+        // Apply filters
+        // Note: Firestore has limitations on complex queries.
+        // For full-text search, a dedicated search service (e.g., Algolia, Elasticsearch) is usually better.
+        // This basic search will look for exact matches or prefixes in specific fields.
+
+        if (category) {
+            query = query.where('identification.category', '==', category);
+        }
+        if (sku) {
+            query = query.where('identification.idSku', '==', sku);
+        }
+        if (dateFrom) {
+            query = query.where('quotationDate', '>=', new Date(dateFrom));
+        }
+        if (dateTo) {
+            // Adjust dateTo to include the whole day
+            const toDateObj = new Date(dateTo);
+            toDateObj.setHours(23, 59, 59, 999);
+            query = query.where('quotationDate', '<=', toDateObj);
+        }
+
+        // For search term, this is a simplified approach.
+        // Firestore is not ideal for complex text search across multiple fields.
+        // This example won't implement a multi-field text search directly in the query
+        // due to Firestore limitations. Client-side filtering after a broader server query
+        // might be needed for that, or a more advanced server-side search solution.
+        // However, if 'search' is intended for a specific field like SKU or quotationId,
+        // it can be added here. For now, we'll assume search is handled client-side or
+        // is a more specific query not implemented here for brevity.
+
+        // Get total count for pagination (without limit/startAfter for the count)
+        const totalCountSnapshot = await query.get();
+        const totalCount = totalCountSnapshot.size;
+
+        // Apply sorting (newest first)
+        query = query.orderBy('quotationDate', 'desc');
+
+        // Apply pagination
+        if (startAfter) {
+            const lastVisibleDoc = await db.collection('metadata').doc(startAfter).get();
+            if (lastVisibleDoc.exists) {
+                query = query.startAfter(lastVisibleDoc);
             }
         }
-        res.json(metadata);
+        query = query.limit(parseInt(limit));
+
+        const snapshot = await query.get();
+        const metadataSummaries = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            const summary = {
+                quotationId: data.quotationId || doc.id,
+                identification: data.identification || {},
+                quotationDate: data.quotationDate,
+                storedInCloudStorage: data.storedInCloudStorage || false,
+            };
+            if (data.storedInCloudStorage && data.storagePath) {
+                summary.storagePath = data.storagePath;
+            }
+            metadataSummaries.push(summary);
+        });
+
+        res.json({
+            quotations: metadataSummaries,
+            totalCount: totalCount,
+            hasNextPage: metadataSummaries.length === parseInt(limit) && metadataSummaries.length > 0 // Basic check for next page
+        });
+
     } catch (err) {
-        console.error('Error fetching metadata:', err);
-        res.status(500).json({ error: { message: 'Failed to load metadata', details: err.message } });
+        console.error('Error fetching metadata summaries:', err);
+        res.status(500).json({ error: { message: 'Failed to load metadata summaries', details: err.message } });
+    }
+});
+
+// Get a single quotation (detailed view)
+app.get('/api/metadata/:id', async (req, res) => {
+    res.set('Cache-Control', 'no-cache');
+    try {
+        const id = req.params.id;
+        const docRef = db.collection('metadata').doc(id);
+        const doc = await docRef.get();
+
+        if (!doc.exists) {
+            return res.status(404).json({ error: { message: 'Quotation not found' } });
+        }
+
+        const data = doc.data();
+
+        if (data.storedInCloudStorage) {
+            if (!data.storagePath) {
+                 console.error(`Quotation ${id} is marked as stored in cloud but has no storagePath.`);
+                 return res.status(500).json({ error: { message: 'Quotation data configuration error.' }});
+            }
+            try {
+                const file = bucket.file(data.storagePath);
+                const [contents] = await file.download();
+                const fullQuotation = JSON.parse(contents.toString());
+                // Ensure quotationId is part of the response, client might expect it
+                if (!fullQuotation.quotationId) fullQuotation.quotationId = id;
+                return res.json(fullQuotation);
+            } catch (storageErr) {
+                console.error(`Error downloading quotation ${id} from Cloud Storage:`, storageErr);
+                return res.status(500).json({ error: { message: 'Failed to load full quotation data from storage', details: storageErr.message } });
+            }
+        } else {
+            // Fetch subcollections for Firestore-based quotation
+            const [diamondItemsSnapshot, metalItemsSnapshot, metalSummarySnapshot] = await Promise.all([
+                db.collection('metadata').doc(id).collection('diamondItems').get(),
+                db.collection('metadata').doc(id).collection('metalItems').get(),
+                db.collection('metadata').doc(id).collection('metalSummary').get()
+            ]);
+            data.diamondItems = diamondItemsSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            data.metalItems = metalItemsSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+            // Ensure summary object exists before trying to assign to its property
+            if (!data.summary) data.summary = {};
+            data.summary.metalSummary = metalSummarySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+             // Ensure quotationId is part of the response
+            if (!data.quotationId) data.quotationId = id;
+            return res.json(data);
+        }
+    } catch (err) {
+        console.error(`Error fetching metadata for ID ${req.params.id}:`, err);
+        res.status(500).json({ error: { message: 'Failed to load quotation details', details: err.message } });
     }
 });
 
@@ -674,12 +799,7 @@ app.post('/api/save-quotation', async (req, res) => {
 
     try {
         // Generate unique quotationId
-        const metadataSnapshot = await db.collection('metadata').get();
-        const existingIds = metadataSnapshot.docs.map(doc => doc.id);
-        let nextId = 1;
-        while (existingIds.includes(`Q-${String(nextId).padStart(5, '0')}`)) {
-            nextId++;
-        }
+        const nextId = await getNextId('quotations');
         const docId = `Q-${String(nextId).padStart(5, '0')}`;
         newQuotation.quotationId = docId; // Assign generated ID
 
@@ -804,32 +924,32 @@ app.post('/api/prices', async (req, res) => {
         // Save new prices
         await db.collection('metalPrices').doc('prices').set(sanitizeData(newPrices));
 
-        // Use a transaction to update metadata atomically
+        // Use a transaction to update metadata atomically for Firestore documents
         await db.runTransaction(async (transaction) => {
+            // FUTURE OPTIMIZATION: Query metadata more selectively based on purities present in newPrices
+            // For now, fetching all non-cloud metadata.
             const metadataSnapshot = await transaction.get(db.collection('metadata'));
-            const metadataDocsToUpdate = metadataSnapshot.docs.filter(doc => !doc.data().storedInCloudStorage);
-
-            const allReads = [];
-            for (const doc of metadataDocsToUpdate) {
-                allReads.push(
-                    transaction.get(db.collection('metadata').doc(doc.id).collection('metalItems')),
-                    transaction.get(db.collection('metadata').doc(doc.id).collection('metalSummary'))
-                );
-            }
-
-            const allSnapshots = await Promise.all(allReads);
-            let snapshotIndex = 0;
+            const firestoreMetadataDocs = metadataSnapshot.docs.filter(doc => !doc.data().storedInCloudStorage);
 
             const updatesToWrite = [];
 
-            for (const doc of metadataDocsToUpdate) {
-                const quotation = doc.data(); // Original quotation data from the first read
-                console.log(`Processing metadata ${doc.id} for price update (read phase complete)`);
+            for (const doc of firestoreMetadataDocs) {
+                const quotation = doc.data();
+                console.log(`Processing Firestore metadata ${doc.id} for price update`);
 
-                const metalItemsSnapshot = allSnapshots[snapshotIndex++];
-                const metalSummarySnapshot = allSnapshots[snapshotIndex++];
+                const metalItemsSnapshot = await transaction.get(db.collection('metadata').doc(doc.id).collection('metalItems'));
+                const metalSummarySnapshot = await transaction.get(db.collection('metadata').doc(doc.id).collection('metalSummary'));
 
                 const metalItems = metalItemsSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                
+                // Check if this quotation actually uses any of the metals whose prices changed
+                const usesAffectedMetal = metalItems.some(metal => newPrices.hasOwnProperty(metal.purity)) ||
+                                          (quotation.summary && quotation.summary.metalSummary && quotation.summary.metalSummary.some(summary => newPrices.hasOwnProperty(summary.purity)));
+
+                if (!usesAffectedMetal) {
+                    console.log(`Skipping metadata ${doc.id}, no relevant metal purities found for update.`);
+                    continue;
+                }
                 const updatedMetalItems = metalItems.map(metal => {
                     const newRate = newPrices[metal.purity];
                     if (newRate === undefined) { // Check for undefined explicitly
@@ -909,6 +1029,77 @@ app.post('/api/prices', async (req, res) => {
                 transaction.set(update.ref, update.data);
             });
         });
+
+        // Handle Cloud Storage updates separately
+        const cloudMetadataSnapshot = await db.collection('metadata')
+            .where('storedInCloudStorage', '==', true)
+            .get();
+
+        for (const doc of cloudMetadataSnapshot.docs) {
+            const quotationData = doc.data();
+            if (!quotationData.storagePath) {
+                console.warn(`No storagePath for cloud metadata ${doc.id}, skipping price update`);
+                continue;
+            }
+
+            try {
+                console.log(`Processing Cloud Storage metadata ${doc.id} for price update`);
+                const file = bucket.file(quotationData.storagePath);
+                const [contents] = await file.download();
+                let metadata = JSON.parse(contents.toString());
+
+                let csMetadataUpdated = false;
+
+                // Check if this quotation actually uses any of the metals whose prices changed
+                 const csUsesAffectedMetal = (metadata.metalItems && metadata.metalItems.some(metal => newPrices.hasOwnProperty(metal.purity))) ||
+                                           (metadata.summary && metadata.summary.metalSummary && metadata.summary.metalSummary.some(summary => newPrices.hasOwnProperty(summary.purity)));
+
+                if (!csUsesAffectedMetal) {
+                    console.log(`Skipping cloud metadata ${doc.id}, no relevant metal purities found for update.`);
+                    continue;
+                }
+
+                if (metadata.metalItems && Array.isArray(metadata.metalItems)) {
+                    metadata.metalItems = metadata.metalItems.map(metal => {
+                        const newRate = newPrices[metal.purity];
+                        if (newRate !== undefined) {
+                            csMetadataUpdated = true;
+                            const newTotalMetal = (parseFloat(metal.grams) * parseFloat(newRate)).toFixed(2);
+                            const newTotal = (parseFloat(newTotalMetal) + parseFloat(metal.makingCharges || 0)).toFixed(2);
+                            return { ...metal, ratePerGram: parseFloat(newRate).toFixed(2), totalMetal: newTotalMetal, total: newTotal };
+                        }
+                        return metal;
+                    });
+                }
+
+                if (metadata.summary && metadata.summary.metalSummary && Array.isArray(metadata.summary.metalSummary)) {
+                    metadata.summary.metalSummary = metadata.summary.metalSummary.map(summary => {
+                        const newRate = newPrices[summary.purity];
+                        if (newRate !== undefined) {
+                            csMetadataUpdated = true;
+                            const newTotalMetal = (parseFloat(summary.grams) * parseFloat(newRate)).toFixed(2);
+                            const newTotal = (
+                                parseFloat(newTotalMetal) +
+                                parseFloat(summary.makingCharges || 0) +
+                                parseFloat(summary.totalDiamondAmount || 0)
+                            ).toFixed(2);
+                            return { ...summary, ratePerGram: parseFloat(newRate).toFixed(2), totalMetal: newTotalMetal, total: newTotal, updatedAt: new Date().toISOString() };
+                        }
+                        return summary;
+                    });
+                }
+                
+                if (csMetadataUpdated) {
+                    await bucket.file(quotationData.storagePath).save(JSON.stringify(metadata), {
+                        contentType: 'application/json'
+                    });
+                    console.log(`Cloud metadata ${doc.id} updated with new prices.`);
+                }
+
+            } catch (storageErr) {
+                console.error(`Error processing Cloud Storage metadata ${doc.id} for price update:`, storageErr);
+            }
+        }
 
         res.json({ message: 'Prices and metadata updated successfully' });
     } catch (err) {

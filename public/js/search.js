@@ -32,48 +32,57 @@ const elements = {
     themeToggle: document.getElementById('theme-toggle'),
     backToTop: document.getElementById('backToTop'),
     scrollToBottom: document.getElementById('scrollToBottom'),
+    loadingSpinner: document.getElementById('loadingSpinner'),
 };
 
 let quotations = [];
 let currentQuotation = null;
+let displayedCards = 5;
+const cardsPerPage = 5;
+let cachedFilteredData = null;
 
-async function init() {
-    await fetchQuotations();
-    populateCategoryFilter();
-    setupEventListeners();
-    loadTheme();
+// Debounce utility
+function debounce(fn, delay) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), delay);
+    };
 }
 
-async function fetchQuotations() {
-    try {
-        // Show loading spinner
-        document.getElementById('loadingSpinner').style.display = 'flex';
-        
-        const response = await fetch('/api/metadata');
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        quotations = await response.json();
-        quotations.sort((a, b) => {
-            const dateA = new Date(a.quotationDate);
-            const dateB = new Date(b.quotationDate);
-            if (isNaN(dateA)) return 1;
-            if (isNaN(dateB)) return -1;
-            return dateB - dateA;
-        });
-        renderCards(quotations);
-    } catch (error) {
-        console.error('Error fetching quotations:', error);
-        showToast('Failed to load quotations. Please try again.');
-        renderCards([]);
-    } finally {
-        // Hide loading spinner
-        document.getElementById('loadingSpinner').style.display = 'none';
+// Optimized date parsing
+function parseQuotationDate(dateInput) {
+    if (!dateInput) return null;
+
+    if (typeof dateInput === 'object' && (dateInput._seconds || dateInput.seconds)) {
+        const seconds = dateInput._seconds || dateInput.seconds;
+        const nanoseconds = dateInput._nanoseconds || dateInput.nanoseconds || 0;
+        return new Date(seconds * 1000 + nanoseconds / 1000000);
     }
+
+    if (typeof dateInput === 'string') {
+        const [datePart, timePart] = dateInput.replace(/[\u202F\u00A0]/g, ' ').trim().split(' at ');
+        if (!datePart || !timePart) return null;
+        const [time, period] = timePart.split(' ');
+        if (!time || !period) return null;
+        try {
+            return new Date(`${datePart} ${time} ${period}`);
+        } catch {
+            return null;
+        }
+    }
+
+    return null;
+}
+
+function sortByDateNewestFirst(a, b) {
+    const dateA = parseQuotationDate(a.quotationDate) || new Date(0);
+    const dateB = parseQuotationDate(b.quotationDate) || new Date(0);
+    return dateB - dateA;
 }
 
 function hasValidImage(image) {
-    return typeof image === 'string' && image.trim() !== '' && image !== 'data:image/svg+xml;base64,' && !image.includes('undefined');
+    return typeof image === 'string' && image.trim() && image !== 'data:image/svg+xml;base64,' && !image.includes('undefined');
 }
 
 function createCard(quotation) {
@@ -84,174 +93,170 @@ function createCard(quotation) {
     if (quotation.identification.images.length > 0 && hasValidImage(quotation.identification.images[0])) {
         const img = document.createElement('img');
         img.className = 'card-img';
+        img.loading = 'lazy';
         img.src = quotation.identification.images[0];
         img.alt = quotation.identification.category;
-        img.onerror = () => {
-            img.classList.add('hidden');
-            card.classList.add('card--no-image');
-        };
+        img.onerror = () => img.classList.add('hidden');
         card.appendChild(img);
     }
-
-    const closeContainer = document.createElement('div');
-    closeContainer.className = 'card-close-container';
-    closeContainer.innerHTML = '';
-
-    const leftBracket = document.createElement('span');
-    leftBracket.className = 'bracket';
-    leftBracket.textContent = '';
 
     const closeBtn = document.createElement('button');
     closeBtn.className = 'card-close-x';
     closeBtn.innerHTML = 'X';
     closeBtn.setAttribute('aria-label', 'Delete quotation');
-    closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        showDeleteConfirmation(quotation.quotationId);
-    });
 
-    const rightBracket = document.createElement('span');
-    rightBracket.className = 'bracket';
-    rightBracket.textContent = '';
-
-    closeContainer.appendChild(leftBracket);
+    const closeContainer = document.createElement('div');
+    closeContainer.className = 'card-close-container';
     closeContainer.appendChild(closeBtn);
-    closeContainer.appendChild(rightBracket);
     card.appendChild(closeContainer);
 
     const cardBody = document.createElement('div');
     cardBody.className = 'card-body';
-
-    const title = document.createElement('h3');
-    title.className = 'card-title';
-    title.textContent = quotation.identification.category;
-
-    const sku = document.createElement('p');
-    sku.className = 'card-text';
-    sku.innerHTML = `<strong>SKU:</strong> ${quotation.identification.idSku}`;
-
-    const date = document.createElement('p');
-    date.className = 'card-text card-date';
-    date.innerHTML = `<strong>Date:</strong> ${formatDate(quotation.quotationDate)}`;
-
-    const downloadBtn = document.createElement('button');
-    downloadBtn.className = 'download-btn';
-    downloadBtn.innerHTML = '<i class="fas fa-download"></i> Download Excel';
-    downloadBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        exportToExcel(quotation);
-    });
-
-    cardBody.appendChild(title);
-    cardBody.appendChild(sku);
-    cardBody.appendChild(date);
-    cardBody.appendChild(downloadBtn);
+    cardBody.innerHTML = `
+        <h3 class="card-title">${quotation.identification.category}</h3>
+        <p class="card-text"><strong>SKU:</strong> ${quotation.identification.idSku}</p>
+        <p class="card-text card-date"><strong>Date:</strong> ${formatDate(quotation.quotationDate)}</p>
+        <button class="download-btn"><i class="fas fa-download"></i> Download Excel</button>
+    `;
     card.appendChild(cardBody);
 
-    card.addEventListener('click', (e) => {
-        if (e.target !== closeBtn && !e.target.classList.contains('bracket') && e.target !== downloadBtn) {
-            openModal(quotation);
-        }
-    });
-
-    return card;
+    return { card, closeBtn };
 }
 
 function exportToExcel(quotation) {
-    // Show loading spinner and disable download button
-    document.getElementById('loadingSpinner').style.display = 'flex';
+    elements.loadingSpinner.style.display = 'flex';
     const downloadButtons = document.querySelectorAll('.download-btn');
     downloadButtons.forEach(btn => btn.disabled = true);
 
-    // Ensure spinner is visible for at least 500ms for UX
     setTimeout(() => {
         try {
             const wb = XLSX.utils.book_new();
-
-            // Metal Items Sheet
-            const metalData = quotation.metalItems.map(item => ({
-                Purity: item.purity,
-                Grams: item.grams,
-                'Rate/Gram': `₹${item.ratePerGram}`,
-                'Total Metal': `₹${item.totalMetal}`,
-                'Making Charges': `₹${item.makingCharges}`
-            }));
-            const metalSheet = XLSX.utils.json_to_sheet(metalData);
-            XLSX.utils.book_append_sheet(wb, metalSheet, 'Metal Items');
-
-            // Diamond Items Sheet
-            const diamondData = quotation.diamondItems.length > 0
-                ? quotation.diamondItems.map(item => ({
-                    Shape: item.shape,
-                    Dimensions: item.mm,
-                    Pieces: item.pcs,
-                    'Weight/Piece': `${item.weightPerPiece}ct`,
-                    'Total Weight': `${item.totalWeightCt}ct`,
-                    'Price/Ct': `₹${item.pricePerCt}`,
-                    Total: `₹${item.total}`
-                }))
-                : [{ Message: 'No diamond items' }];
-            const diamondSheet = XLSX.utils.json_to_sheet(diamondData);
-            XLSX.utils.book_append_sheet(wb, diamondSheet, 'Diamond Items');
-
-            // Summary Sheet
-            const summaryData = quotation.summary.metalSummary.map(item => ({
-                Description: item.purity,
-                'Metal Amount': `₹${item.totalMetal}`,
-                'Making Charges': `₹${item.makingCharges}`,
-                'Diamond Amount': `₹${item.totalDiamondAmount}`,
-                Total: `₹${item.total}`
-            }));
-            const summarySheet = XLSX.utils.json_to_sheet(summaryData);
-            XLSX.utils.book_append_sheet(wb, summarySheet, 'Summary');
-
-            // Identification Sheet
-            const identificationData = [{
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet([{
+                'Quotation ID': quotation.quotationId,
                 'SKU ID': quotation.identification.idSku,
                 Category: quotation.identification.category,
                 'Quotation Date': formatDate(quotation.quotationDate)
-            }];
-            const idSheet = XLSX.utils.json_to_sheet(identificationData);
-            XLSX.utils.book_append_sheet(wb, idSheet, 'Identification');
+            }]), 'Identification');
 
-            // Download the Excel file
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(
+                quotation.metalItems.map(item => ({
+                    Purity: item.purity,
+                    Grams: item.grams,
+                    'Rate/Gram': `₹${item.ratePerGram}`,
+                    'Total Metal': `₹${item.totalMetal}`,
+                    'Making Charges': `₹${item.makingCharges}`
+                }))
+            ), 'Metal Items');
+
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(
+                quotation.diamondItems.length > 0
+                    ? quotation.diamondItems.map(item => ({
+                        Shape: item.shape,
+                        "Selected MM": item.mm || item.displayMM || 'N/A',
+                        'Entered MM': item.userMM || 'N/A',
+                        Pieces: item.pcs,
+                        'Weight/Piece': `${item.weightPerPiece}ct`,
+                        'Total Weight': `${item.totalWeightCt}ct`,
+                        'Price/Ct': `₹${item.pricePerCt}`,
+                        Total: `₹${item.total}`
+                    }))
+                    : [{ Message: 'No diamond items' }]
+            ), 'Diamond Items');
+
+            XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(
+                quotation.summary.metalSummary.map(item => ({
+                    Description: item.purity,
+                    'Metal Amount': `₹${item.totalMetal}`,
+                    'Making Charges': `₹${item.makingCharges}`,
+                    'Diamond Amount': `₹${item.totalDiamondAmount}`,
+                    Total: `₹${item.total}`
+                }))
+            ), 'Summary');
+
             XLSX.writeFile(wb, `Quotation_${quotation.quotationId}.xlsx`);
-
-            // Hide spinner and re-enable buttons
-            document.getElementById('loadingSpinner').style.display = 'none';
-            downloadButtons.forEach(btn => btn.disabled = false);
             showToast('Excel file downloaded successfully');
         } catch (error) {
             console.error('Error exporting Excel:', error);
-            document.getElementById('loadingSpinner').style.display = 'none';
-            downloadButtons.forEach(btn => btn.disabled = false);
             showToast('Failed to download Excel file. Please try again.');
+        } finally {
+            elements.loadingSpinner.style.display = 'none';
+            downloadButtons.forEach(btn => btn.disabled = false);
         }
-    }, 500); // Minimum 500ms delay for spinner visibility
+    }, 100);
 }
 
 function renderCards(data) {
-    elements.cardGrid.innerHTML = data.length === 0 
-        ? '<div class="no-results-container">No quotations found 🤷‍♂️</div>'
-        : '';
+    const fragment = document.createDocumentFragment();
+    elements.cardGrid.innerHTML = data.length === 0 ? '<div class="no-results-container">No quotations found 🤷‍♂️</div>' : '';
+
     data.forEach((quotation, index) => {
-        const card = createCard(quotation);
+        const { card, closeBtn } = createCard(quotation);
         card.style.animationDelay = `${index * 0.1}s`;
-        elements.cardGrid.appendChild(card);
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            showDeleteConfirmation(quotation.quotationId);
+        });
+        card.querySelector('.download-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            exportToExcel(quotation);
+        });
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('.card-close-x, .download-btn')) {
+                openModal(quotation);
+            }
+        });
+        fragment.appendChild(card);
     });
+
+    elements.cardGrid.appendChild(fragment);
+}
+
+function updatePaginationControls() {
+    let paginationContainer = document.getElementById('pagination-container');
+    if (!paginationContainer) {
+        paginationContainer = document.createElement('div');
+        paginationContainer.id = 'pagination-container';
+        paginationContainer.style.cssText = 'display: flex; justify-content: center; gap: 1rem; margin-top: 1.5rem;';
+        elements.cardGrid.insertAdjacentElement('afterend', paginationContainer);
+    }
+
+    const filteredData = filterQuotationsData();
+    paginationContainer.innerHTML = '';
+
+    if (displayedCards < filteredData.length) {
+        const moreBtn = document.createElement('button');
+        moreBtn.className = 'pagination-btn';
+        moreBtn.textContent = 'More';
+        moreBtn.addEventListener('click', () => {
+            displayedCards += cardsPerPage;
+            renderCards(filteredData.slice(0, displayedCards));
+            updatePaginationControls();
+        });
+        paginationContainer.appendChild(moreBtn);
+    }
+
+    if (filteredData.length > cardsPerPage) {
+        const allBtn = document.createElement('button');
+        allBtn.className = 'pagination-btn';
+        allBtn.textContent = 'All';
+        allBtn.addEventListener('click', () => {
+            displayedCards = filteredData.length;
+            renderCards(filteredData);
+            updatePaginationControls();
+        });
+        paginationContainer.appendChild(allBtn);
+    }
 }
 
 function openModal(quotation) {
     currentQuotation = quotation;
-
     elements.detailModal.style.display = 'none';
 
     elements.modalImg.className = quotation.identification.images.length > 0 && hasValidImage(quotation.identification.images[0]) ? 'modal-img' : 'modal-img hidden';
     if (quotation.identification.images.length > 0 && hasValidImage(quotation.identification.images[0])) {
         elements.modalImg.src = quotation.identification.images[0];
+        elements.modalImg.loading = 'lazy';
         elements.modalImg.onerror = () => elements.modalImg.classList.add('hidden');
-        elements.modalImg.style.cursor = 'pointer';
         elements.modalImg.onclick = () => openFullScreenImage(quotation.identification.images[0]);
     } else {
         elements.modalImg.onclick = null;
@@ -262,11 +267,11 @@ function openModal(quotation) {
     if (!imageGallery) {
         imageGallery = document.createElement('div');
         imageGallery.className = 'image-gallery';
-        modalBody.insertBefore(imageGallery, modalBody.firstChild);
+        modalBody.prepend(imageGallery);
     }
-    imageGallery.innerHTML = quotation.identification.images.length > 0 
+    imageGallery.innerHTML = quotation.identification.images.length > 0
         ? quotation.identification.images.map((img, index) => 
-            `<img src="${img}" alt="Product Image ${index + 1}" class="gallery-img ${index === 0 ? 'active' : ''}" onclick="changeModalImage('${img}')">`
+            `<img src="${img}" alt="Product Image ${index + 1}" class="gallery-img ${index === 0 ? 'active' : ''}" loading="lazy">`
         ).join('')
         : '<p>No images available</p>';
 
@@ -285,11 +290,12 @@ function openModal(quotation) {
         </tr>
     `).join('');
 
-    elements.diamondTableBody.innerHTML = quotation.diamondItems.length > 0 
+    elements.diamondTableBody.innerHTML = quotation.diamondItems.length > 0
         ? quotation.diamondItems.map(item => `
             <tr>
                 <td>${item.shape}</td>
-                <td>${item.mm}</td>
+                <td>${item.mm || 'N/A'}</td>
+                <td>${item.userMM || item.mm || 'N/A'}</td>
                 <td>${item.pcs}</td>
                 <td>${item.weightPerPiece}ct</td>
                 <td>${item.totalWeightCt}ct</td>
@@ -297,10 +303,10 @@ function openModal(quotation) {
                 <td>₹${item.total}</td>
             </tr>
         `).join('')
-        : '<tr><td colspan="7" style="text-align: center;">No diamond items</td></tr>';
+        : '<tr><td colspan="8" style="text-align: center;">No diamond items</td></tr>';
 
-    const totalMetalAmount = quotation.metalItems.reduce((sum, item) => sum + parseFloat(item.totalMetal || 0), 0).toFixed(2);
-    const totalMakingCharges = quotation.metalItems.reduce((sum, item) => sum + parseFloat(item.makingCharges || 0), 0).toFixed(2);
+    const totalMetalAmount = quotation.metalItems.reduce((sum, item) => sum + Number(item.totalMetal || 0), 0).toFixed(2);
+    const totalMakingCharges = quotation.metalItems.reduce((sum, item) => sum + Number(item.makingCharges || 0), 0).toFixed(2);
     const metalPurities = quotation.metalItems.map(item => item.purity).join(', ');
 
     elements.modalMetalAmount.textContent = `₹${totalMetalAmount}`;
@@ -331,11 +337,6 @@ function openModal(quotation) {
         exportToExcel(quotation);
     };
 
-    elements.modalDeleteBtn.onclick = (e) => {
-        e.stopPropagation();
-        showDeleteConfirmation(quotation.quotationId);
-    };
-
     elements.detailModal.style.display = 'block';
     document.body.style.overflow = 'hidden';
     elements.detailModal.scrollTop = 0;
@@ -345,7 +346,7 @@ function openModal(quotation) {
 function changeModalImage(src) {
     elements.modalImg.src = src;
     elements.modalImg.classList.remove('hidden');
-    const galleryImages = document.querySelectorAll('.gallery-img');
+    const galleryImages = document.querySelectorAll('.image-gallery img');
     galleryImages.forEach(img => img.classList.remove('active'));
     const clickedImage = Array.from(galleryImages).find(img => img.src === src);
     if (clickedImage) clickedImage.classList.add('active');
@@ -355,22 +356,17 @@ function openFullScreenImage(src) {
     const fullScreenDiv = document.createElement('div');
     fullScreenDiv.className = 'fullscreen-image';
     fullScreenDiv.innerHTML = `
-        <img src="${src}" alt="Full Screen Image">
+        <img src="${src}" alt="Full Screen Image" loading="lazy">
         <button class="fullscreen-close">X</button>
     `;
     document.body.appendChild(fullScreenDiv);
     document.body.style.overflow = 'hidden';
 
-    fullScreenDiv.querySelector('.fullscreen-close').addEventListener('click', () => {
-        fullScreenDiv.remove();
-        document.body.style.overflow = 'auto';
-    });
-
+    const closeBtn = fullScreenDiv.querySelector('.fullscreen-close');
+    closeBtn.addEventListener('click', () => fullScreenDiv.remove());
     fullScreenDiv.addEventListener('click', (e) => {
-        if (e.target === fullScreenDiv) {
-            fullScreenDiv.remove();
-            document.body.style.overflow = 'auto';
-        }
+        if (e.target === fullScreenDiv) fullScreenDiv.remove();
+        document.body.style.overflow = 'auto';
     });
 }
 
@@ -382,13 +378,11 @@ function closeModal() {
 
 function showDeleteConfirmation(quotationId) {
     if (!quotationId) {
-        console.warn('showDeleteConfirmation called without a valid quotationId');
+        console.error('No quotation ID provided for deletion');
+        showToast('Error: No quotation ID provided');
         return;
     }
     elements.confirmationDialog.style.display = 'block';
-    
-    elements.confirmDelete.onclick = null;
-    elements.cancelDelete.onclick = null;
     
     elements.confirmDelete.onclick = async () => {
         await deleteQuotation(quotationId);
@@ -401,29 +395,26 @@ function showDeleteConfirmation(quotationId) {
 }
 
 async function deleteQuotation(quotationId) {
+    elements.loadingSpinner.style.display = 'flex';
     try {
-        const response = await fetch(`/api/metadata/${quotationId}`, {
+        const response = await fetch(`https://lepdo-quotation-system-deploy.onrender.com/api/metadata/${quotationId}`, {
             method: 'DELETE'
         });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const result = await response.json();
         quotations = quotations.filter(q => q.quotationId !== quotationId);
-        quotations.sort((a, b) => {
-            const dateA = new Date(a.quotationDate);
-            const dateB = new Date(b.quotationDate);
-            if (isNaN(dateA)) return 1;
-            if (isNaN(dateB)) return -1;
-            return dateB - dateA;
-        });
-        renderCards(quotations);
+        displayedCards = Math.min(displayedCards, quotations.length);
+        cachedFilteredData = null; // Invalidate cache
+        renderCards(filterQuotationsData().slice(0, displayedCards));
+        updatePaginationControls();
         showToast(result.message || 'Quotation deleted successfully');
         if (currentQuotation?.quotationId === quotationId) closeModal();
         populateCategoryFilter();
     } catch (error) {
         console.error('Error deleting quotation:', error);
         showToast('Failed to delete quotation. Please try again.');
+    } finally {
+        elements.loadingSpinner.style.display = 'none';
     }
 }
 
@@ -435,65 +426,30 @@ function showToast(message) {
 
 function populateCategoryFilter() {
     const categories = [...new Set(quotations.map(q => q.identification.category))];
-    elements.categoryFilter.innerHTML = '<option value="">All Categories</option>' + 
-        categories.map(category => `<option value="${category}">${category}</option>`).join('');
+    elements.categoryFilter.innerHTML = `<option value="">All Categories</option>${categories.map(category => `<option value="${category}">${category}</option>`).join('')}`;
 }
 
 function formatDate(dateInput) {
-    if (!dateInput) {
-        return 'Invalid Date';
-    }
-
-    let date;
-
-    // Check if input is a Firestore Timestamp object
-    if (typeof dateInput === 'object' && (dateInput._seconds || dateInput.seconds)) {
-        const seconds = dateInput._seconds || dateInput.seconds;
-        const nanoseconds = dateInput._nanoseconds || dateInput.nanoseconds || 0;
-        date = new Date(seconds * 1000 + nanoseconds / 1000000); // Convert to milliseconds
-    } else if (typeof dateInput === 'string') {
-        // Handle string input as before
-        const normalizedString = dateInput.replace(/[\u202F\u00A0]/g, ' ').trim();
-        const [datePart, timePartWithTz] = normalizedString.split(' at ');
-        if (!datePart || !timePartWithTz) {
-            return 'Invalid Date';
-        }
-        const timeParts = timePartWithTz.split(' ');
-        if (timeParts.length < 2) {
-            return 'Invalid Date';
-        }
-        const time = timeParts[0];
-        const period = timeParts[1];
-        try {
-            date = new Date(`${datePart} ${time} ${period}`);
-        } catch (e) {
-            return 'Invalid Date';
-        }
-    } else {
-        return 'Invalid Date';
-    }
-
-    if (isNaN(date)) {
-        return 'Invalid Date';
-    }
-
-    // Format the date for display
-    return date.toLocaleDateString('en-US', {
+    const date = parseQuotationDate(dateInput);
+    return date ? date.toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
         hour12: true
-    });
+    }) : 'Invalid Date';
 }
 
-function filterQuotations() {
+function filterQuotationsData() {
     const searchTerm = elements.searchInput.value.toLowerCase();
     const category = elements.categoryFilter.value;
     const sku = elements.skuFilter.value;
     const fromDate = elements.dateFrom.value ? new Date(elements.dateFrom.value) : null;
     const toDate = elements.dateTo.value ? new Date(elements.dateTo.value) : null;
+
+    const cacheKey = `${searchTerm}|${category}|${sku}|${fromDate?.toISOString()}|${toDate?.toISOString()}`;
+    if (cachedFilteredData?.key === cacheKey) return cachedFilteredData.data;
 
     const filtered = quotations.filter(q => {
         const matchesSearch = !searchTerm || [
@@ -506,26 +462,27 @@ function filterQuotations() {
         const matchesCategory = !category || q.identification.category === category;
         const matchesSku = !sku || q.identification.idSku === sku;
 
-        const quoteDate = new Date(q.quotationDate);
-        const quoteDateOnly = new Date(quoteDate.getFullYear(), quoteDate.getMonth(), quoteDate.getDate());
+        const quoteDate = parseQuotationDate(q.quotationDate);
+        const quoteDateOnly = quoteDate ? new Date(quoteDate.getFullYear(), quoteDate.getMonth(), quoteDate.getDate()) : null;
         const fromDateOnly = fromDate ? new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate()) : null;
         const toDateOnly = toDate ? new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate()) : null;
 
-        const matchesDate = (!fromDateOnly || quoteDateOnly >= fromDateOnly) && 
-                           (!toDateOnly || quoteDateOnly <= toDateOnly);
-
-        return matchesSearch && matchesCategory && matchesSku && matchesDate;
+        return matchesSearch && matchesCategory && matchesSku && 
+               (!fromDateOnly || !quoteDateOnly || quoteDateOnly >= fromDateOnly) && 
+               (!toDateOnly || !quoteDateOnly || quoteDateOnly <= toDateOnly);
     });
 
-    filtered.sort((a, b) => {
-        const dateA = new Date(a.quotationDate);
-        const dateB = new Date(b.quotationDate);
-        if (isNaN(dateA)) return 1;
-        if (isNaN(dateB)) return -1;
-        return dateB - dateA;
-    });
-    renderCards(filtered);
+    cachedFilteredData = { key: cacheKey, data: filtered };
+    return filtered;
 }
+
+const debouncedFilterQuotations = debounce(() => {
+    displayedCards = cardsPerPage;
+    renderCards(filterQuotationsData().slice(0, displayedCards));
+    updatePaginationControls();
+}, 300);
+
+const debouncedShowSuggestions = debounce(showSuggestions, 200);
 
 function showSuggestions() {
     const term = elements.searchInput.value.toLowerCase();
@@ -543,10 +500,8 @@ function showSuggestions() {
     }, []);
 
     const uniqueMatches = [...new Set(matches)];
-    elements.suggestions.innerHTML = uniqueMatches.length > 0 
-        ? uniqueMatches.slice(0, 5).map(match => `
-            <div class="suggestion-item" data-value="${match.split(': ')[1]}">${match}</div>
-        `).join('')
+    elements.suggestions.innerHTML = uniqueMatches.length > 0
+        ? uniqueMatches.slice(0, 5).map(match => `<div class="suggestion-item" data-value="${match.split(': ')[1]}">${match}</div>`).join('')
         : '<div class="no-results">No matches found 🤷‍♂️</div>';
 
     elements.suggestions.style.display = 'block';
@@ -559,7 +514,10 @@ function resetFilters() {
     elements.dateFrom.value = '';
     elements.dateTo.value = '';
     elements.suggestions.style.display = 'none';
-    renderCards(quotations);
+    displayedCards = cardsPerPage;
+    cachedFilteredData = null;
+    renderCards(quotations.slice(0, displayedCards));
+    updatePaginationControls();
     showToast('Filters reset successfully!');
 }
 
@@ -576,54 +534,73 @@ function loadTheme() {
     elements.themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
 }
 
+async function fetchQuotations() {
+    elements.loadingSpinner.style.display = 'flex';
+    try {
+        const response = await fetch('https://lepdo-quotation-system-deploy.onrender.com/api/metadata');
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        quotations = await response.json();
+        quotations.sort(sortByDateNewestFirst);
+        cachedFilteredData = null;
+        renderCards(quotations.slice(0, displayedCards));
+        updatePaginationControls();
+    } catch (error) {
+        console.error('Error fetching quotations:', error);
+        showToast('Failed to load quotations. Please try again.');
+        renderCards([]);
+    } finally {
+        elements.loadingSpinner.style.display = 'none';
+    }
+}
+
 function setupEventListeners() {
-    elements.searchInput.addEventListener('input', () => {
-        showSuggestions();
-        filterQuotations();
+    elements.cardGrid.addEventListener('click', (e) => {
+        const suggestion = e.target.closest('.suggestion-item');
+        if (suggestion) {
+            elements.searchInput.value = suggestion.dataset.value;
+            elements.suggestions.style.display = 'none';
+            debouncedFilterQuotations();
+        }
     });
-    elements.searchInput.addEventListener('focus', showSuggestions);
+
+    elements.searchInput.addEventListener('input', debouncedShowSuggestions);
+    elements.searchInput.addEventListener('focus', debouncedShowSuggestions);
     document.addEventListener('click', e => {
         if (e.target !== elements.searchInput && !elements.suggestions.contains(e.target)) {
             elements.suggestions.style.display = 'none';
         }
     });
-    elements.suggestions.addEventListener('click', e => {
-        if (e.target.classList.contains('suggestion-item')) {
-            elements.searchInput.value = e.target.dataset.value;
-            elements.suggestions.style.display = 'none';
-            filterQuotations();
-        }
-    });
-    elements.searchBtn.addEventListener('click', filterQuotations);
-    elements.categoryFilter.addEventListener('change', filterQuotations);
-    elements.skuFilter.addEventListener('input', filterQuotations);
-    elements.dateFrom.addEventListener('change', filterQuotations);
-    elements.dateTo.addEventListener('change', filterQuotations);
+
+    elements.searchBtn.addEventListener('click', debouncedFilterQuotations);
+    elements.categoryFilter.addEventListener('change', debouncedFilterQuotations);
+    elements.skuFilter.addEventListener('input', debouncedFilterQuotations);
+    elements.dateFrom.addEventListener('change', debouncedFilterQuotations);
+    elements.dateTo.addEventListener('change', debouncedFilterQuotations);
     elements.resetFiltersBtn.addEventListener('click', resetFilters);
     elements.modalCloseBtn.addEventListener('click', closeModal);
     elements.modalCloseX.addEventListener('click', closeModal);
+    elements.modalDeleteBtn.addEventListener('click', () => {
+        if (currentQuotation) {
+            showDeleteConfirmation(currentQuotation.quotationId);
+        } else {
+            console.error('No current quotation selected for deletion');
+            showToast('Error: No quotation selected');
+        }
+    });
     elements.detailModal.addEventListener('click', e => {
         if (e.target === elements.detailModal) closeModal();
     });
-    if (elements.themeToggle) {
-        elements.themeToggle.addEventListener('click', toggleTheme);
-    }
+    elements.themeToggle?.addEventListener('click', toggleTheme);
+    elements.backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    elements.scrollToBottom.addEventListener('click', () => window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }));
+    window.addEventListener('resize', debouncedFilterQuotations);
+}
 
-    elements.backToTop.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    elements.scrollToBottom.addEventListener('click', () => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-    });
-
-    window.addEventListener('resize', () => {
-        elements.suggestions.style.display = 'none';
-        if (elements.detailModal.style.display === 'block') {
-            elements.detailModal.scrollTop = 0;
-        }
-        filterQuotations();
-    });
+async function init() {
+    await fetchQuotations();
+    populateCategoryFilter();
+    setupEventListeners();
+    loadTheme();
 }
 
 document.addEventListener('DOMContentLoaded', init);
