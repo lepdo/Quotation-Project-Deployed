@@ -536,7 +536,7 @@ app.get('/api/metadata', async (req, res) => {
     res.set('Cache-Control', 'no-cache');
     try {
         const {
-            limit = 10,
+            limit = 1000000000,
             startAfter,
             search,
             category,
