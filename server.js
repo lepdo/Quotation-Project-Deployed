@@ -12,25 +12,12 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configure CORS to allow specific origins
-const allowedOrigins = [
-    'http://localhost:3000', // Development
-    'https://lepdo.co.in'   // Production
-];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        // Allow requests with no origin (e.g., server-to-server requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true // If your frontend sends credentials (e.g., cookies)
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'], // Allow all common HTTP methods
+    allowedHeaders: ['*'], // Allow all headers
+    credentials: false // No credentials required
 }));
 
 // Construct service account credentials from environment variables
@@ -590,26 +577,41 @@ app.get('/api/metadata', async (req, res) => {
 
         const snapshot = await query.get();
         const metadataSummaries = [];
-        snapshot.forEach(doc => {
+
+        // Fetch full data for each quotation
+        for (const doc of snapshot.docs) {
             const data = doc.data();
-            const summary = {
-                quotationId: data.quotationId || doc.id,
-                identification: data.identification || {},
-                quotationDate: data.quotationDate,
-                storedInCloudStorage: data.storedInCloudStorage || false,
-            };
+            let fullQuotation = { ...data, quotationId: data.quotationId || doc.id };
+
             if (data.storedInCloudStorage && data.storagePath) {
-                summary.storagePath = data.storagePath;
+                try {
+                    const file = bucket.file(data.storagePath);
+                    const [contents] = await file.download();
+                    fullQuotation = { ...JSON.parse(contents.toString()), quotationId: doc.id };
+                } catch (storageErr) {
+                    console.error(`Error downloading quotation ${doc.id} from Cloud Storage:`, storageErr);
+                    continue; // Skip if Cloud Storage fetch fails
+                }
+            } else {
+                const [diamondItemsSnapshot, metalItemsSnapshot, metalSummarySnapshot] = await Promise.all([
+                    db.collection('metadata').doc(doc.id).collection('diamondItems').get(),
+                    db.collection('metadata').doc(doc.id).collection('metalItems').get(),
+                    db.collection('metadata').doc(doc.id).collection('metalSummary').get()
+                ]);
+                fullQuotation.diamondItems = diamondItemsSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                fullQuotation.metalItems = metalItemsSnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+                if (!fullQuotation.summary) fullQuotation.summary = {};
+                fullQuotation.summary.metalSummary = metalSummarySnapshot.docs.map(d => ({ id: d.id, ...d.data() }));
             }
-            metadataSummaries.push(summary);
-        });
+
+            metadataSummaries.push(fullQuotation);
+        }
 
         res.json({
             quotations: metadataSummaries,
             totalCount: totalCount,
             hasNextPage: metadataSummaries.length === parseInt(limit) && metadataSummaries.length > 0
         });
-
     } catch (err) {
         console.error('Error fetching metadata summaries:', err);
         res.status(500).json({ error: { message: 'Failed to load metadata summaries', details: err.message } });
