@@ -425,7 +425,12 @@ function showToast(message) {
 }
 
 function populateCategoryFilter() {
-    const categories = [...new Set(quotations.map(q => q.identification.category))];
+    if (!Array.isArray(quotations)) {
+        console.error('populateCategoryFilter: quotations is not an array:', quotations);
+        elements.categoryFilter.innerHTML = '<option value="">All Categories</option>';
+        return;
+    }
+    const categories = [...new Set(quotations.map(q => q.identification.category).filter(Boolean))];
     elements.categoryFilter.innerHTML = `<option value="">All Categories</option>${categories.map(category => `<option value="${category}">${category}</option>`).join('')}`;
 }
 
@@ -537,9 +542,18 @@ function loadTheme() {
 async function fetchQuotations() {
     elements.loadingSpinner.style.display = 'flex';
     try {
-        const response = await fetch('https://lepdo-quotation-system-deploy.onrender.com/api/metadata');
+        const response = await fetch('https://lepdo-quotation-system-deploy.onrender.com/api/metadata', {
+            headers: { 'Cache-Control': 'no-cache' }
+        });
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        quotations = await response.json();
+        const data = await response.json();
+        console.log('API response:', data); // Log to verify response structure
+        if (!data || !Array.isArray(data.quotations)) {
+            console.error('Invalid quotations data:', data?.quotations);
+            quotations = [];
+            throw new Error('Response does not contain a valid quotations array');
+        }
+        quotations = data.quotations; // Assign only the quotations array
         quotations.sort(sortByDateNewestFirst);
         cachedFilteredData = null;
         renderCards(quotations.slice(0, displayedCards));
@@ -547,6 +561,7 @@ async function fetchQuotations() {
     } catch (error) {
         console.error('Error fetching quotations:', error);
         showToast('Failed to load quotations. Please try again.');
+        quotations = []; // Reset to empty array on error
         renderCards([]);
     } finally {
         elements.loadingSpinner.style.display = 'none';
@@ -597,10 +612,15 @@ function setupEventListeners() {
 }
 
 async function init() {
-    await fetchQuotations();
-    populateCategoryFilter();
-    setupEventListeners();
-    loadTheme();
+    try {
+        await fetchQuotations(); // Wait for quotations to be fetched
+        populateCategoryFilter();
+        setupEventListeners();
+        loadTheme();
+    } catch (error) {
+        console.error('Initialization failed:', error);
+        showToast('Failed to initialize application. Please refresh the page.');
+    }
 }
 
 document.addEventListener('DOMContentLoaded', init);
